@@ -1,10 +1,7 @@
 import * as React from 'react'
-import axios from 'axios'
-
-import AddressForm from './AddressForm'
-import Header from './Header'
-import {LatLng} from '../interfaces/LatLng'
 import {Movie} from '../interfaces/Movie'
+import GetMovies from './get_movies/GetMovies'
+import MovieSelection from './movie_selection/MovieSelection'
 
 interface IndexState {
     isLoadingMovies: boolean
@@ -27,54 +24,23 @@ export default class Index extends React.Component<undefined, IndexState> {
         if (movies) {
             return Index.moviesList(movies)
         }
-        return this.index()
+        return this.getMovies()
     }
 
 
-    private index(): JSX.Element  {
-        return (
-            <div>
-                <Header
-                    description="This app helps plan movie marathons at Canadian and US movie theatres."
-                    titleText="Movie Marathon"
-                />
-                <div>Enter your address:</div>
-                <AddressForm
-                    onGeocodeSuccess={this.onGeocodeSuccess}
-                />
-            </div>
-        )
-
+    private getMovies(): JSX.Element {
+        return <GetMovies
+            onLoading={() => this.setState({isLoadingMovies: true})}
+            onMovies={(movies) => this.setState({movies, isLoadingMovies: false})}
+        />
     }
 
-    private onGeocodeSuccess = (latLng: LatLng) => {
-        const config = {
-            params: {
-                lat: latLng.lat,
-                lng: latLng.lng
-            }
-        }
-        this.setState({isLoadingMovies: true})
-        axios.get('/movies', config)
-            .then(response => this.setState({
-                isLoadingMovies: false,
-                movies: response.data
-            }))
-            .catch(error => console.log(error))
-    }
 
     private static loading(): JSX.Element {
         return <span>Loading</span>
     }
 
-    private static moviesList(movies: Movie[]): JSX.Element  {
-        const elements = movies.map(movie=> {
-            return <li>{movie.title}</li>
-        })
-        return (
-            <ul>
-                {elements}
-            </ul>
-        )
+    private static moviesList(movies: Movie[]): JSX.Element {
+        return <MovieSelection movies={movies}/>
     }
 }

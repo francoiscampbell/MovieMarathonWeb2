@@ -5,17 +5,11 @@ export interface HeaderProps {
     titleText: string
 }
 
-export interface HeaderState {
-
-}
-
-export default class Header extends React.Component<HeaderProps, HeaderState> {
-    render() {
-        return (
-            <div>
-                <h1>{this.props.titleText}</h1>
-                <p>{this.props.description}</p>
-            </div>
-        )
-    }
+export default function Header({description, titleText}: HeaderProps) {
+    return (
+        <div>
+            <h1>{titleText}</h1>
+            <p>{description}</p>
+        </div>
+    )
 }
