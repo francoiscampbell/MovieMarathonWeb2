@@ -16,13 +16,14 @@ def index(request):
 
 
 def movies(request):
+    params = request.GET.copy()
+    params['api_key'] = secrets.TMS_API_KEY
     with requests_mock.mock() as m:
         m.get('http://data.tmsapi.com/v1.1/movies/showings', text=mock_text)
-        response = requests.get('http://data.tmsapi.com/v1.1/movies/showings', params=request.GET)
+        response = requests.get('http://data.tmsapi.com/v1.1/movies/showings', params=params)
         return HttpResponse(response.text)
 
-
-mock_text = """
+mock_text = r"""
 [{
     "tmsId": "MV009512900000",
     "rootId": "13506541",

@@ -1,10 +1,11 @@
 import * as React from 'react'
-import PlacesAutocomplete, {geocodeByAddress, getLatLng} from 'react-places-autocomplete'
+
 import {FormEvent} from 'react'
+import PlacesAutocomplete, {geocodeByAddress, getLatLng} from 'react-places-autocomplete'
 
 
 interface AddressFormProps {
-
+    onGeocodeSuccess: (LatLng) => void
 }
 
 interface AddressFormState {
@@ -38,6 +39,9 @@ export default class AddressForm extends React.Component<AddressFormProps, Addre
     handleFormSubmit = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault()
 
-        console.log('form submitted')
+        geocodeByAddress(this.state.address)
+            .then(results => getLatLng(results[0]))
+            .then(this.props.onGeocodeSuccess)
+            .catch(error => console.error('Error', error))
     }
 }
