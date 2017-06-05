@@ -59,4 +59,5 @@ export interface Showtime {
 export interface Theatre {
     id: string;
     name: string;
+    movies: Movie[] //added
 }

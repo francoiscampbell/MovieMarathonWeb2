@@ -1,5 +1,5 @@
 import * as React from 'react'
-import {Movie} from '../interfaces/Movie'
+import {Movie} from '../data_model/Movie'
 import GetMovies from './get_movies/GetMovies'
 import MovieSelection from './movie_selection/MovieSelection'
 

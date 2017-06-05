@@ -15,7 +15,7 @@ interface AddressFormState {
 export default class AddressForm extends React.Component<AddressFormProps, AddressFormState> {
 
     state = {
-        address: ''
+        address: '7 Walmer Road, Toronto, ON, Canada'
     }
 
     render() {

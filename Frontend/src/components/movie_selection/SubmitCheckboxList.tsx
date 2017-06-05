@@ -1,14 +1,19 @@
 import * as React from 'react'
 
-interface SubmitCheckboxListProps<T> {
-    items: T[]
+export class ListItem {
+    constructor(public readonly key: any, public readonly value: any) {
+    }
+}
+
+interface SubmitCheckboxListProps {
+    items: ListItem[]
     onSubmit: (Array) => void
 }
 
-interface SubmitCheckboxListState<T> {
+interface SubmitCheckboxListState {
 }
 
-export default class SubmitCheckboxList<T> extends React.Component<SubmitCheckboxListProps<T>, SubmitCheckboxListState<T>> {
+export default class SubmitCheckboxList extends React.Component<SubmitCheckboxListProps, SubmitCheckboxListState> {
     items = this.props.items.map(item => {
         return {
             item,
@@ -24,7 +29,7 @@ export default class SubmitCheckboxList<T> extends React.Component<SubmitCheckbo
                         index={index}
                         onChange={this.onCheckboxChange}
                     />
-                    {item}
+                    {item.value || item.toString()}
                 </li>
             )
         })
@@ -35,7 +40,7 @@ export default class SubmitCheckboxList<T> extends React.Component<SubmitCheckbo
                     {elements}
                 </ul>
                 <button
-                    onClick={() => this.props.onSubmit(this.items.filter(item => item.selected))}
+                    onClick={this.onSubmit}
                 >
                     Submit
                 </button>
@@ -46,10 +51,16 @@ export default class SubmitCheckboxList<T> extends React.Component<SubmitCheckbo
     onCheckboxChange = (index, checked) => {
         this.items[index].selected = checked
     }
+
+    onSubmit = () => {
+        this.props.onSubmit(
+            this.items
+                .filter(item => item.selected)
+                .map(item => item.item.key)
+        )
+    }
 }
 
 function ListItemCheckbox({index, onChange}) {
-    return (
-        <input type="checkbox" onChange={event => onChange(index, event.target.checked)}/>
-    )
+    return <input type="checkbox" onChange={event => onChange(index, event.target.checked)}/>
 }

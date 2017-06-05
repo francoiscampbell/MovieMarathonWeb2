@@ -3,7 +3,7 @@ import axios from 'axios'
 
 import AddressForm from './AddressForm'
 import Header from '../Header'
-import {LatLng} from '../../interfaces/LatLng'
+import {LatLng} from '../../data_model/LatLng'
 
 interface GetMoviesProps {
     onLoading: () => void
