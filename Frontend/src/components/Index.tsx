@@ -1,11 +1,14 @@
+import * as Immutable from 'immutable'
 import * as React from 'react'
-import {Movie} from '../data_model/Movie'
+
 import GetMovies from './get_movies/GetMovies'
+import {Movie} from '../data_model/Movie'
 import MovieSelection from './movie_selection/MovieSelection'
+
 
 interface IndexState {
     isLoadingMovies: boolean
-    movies: Movie[]
+    movies: Immutable.Map<string, Movie>
 }
 
 export default class Index extends React.Component<undefined, IndexState> {
@@ -40,7 +43,7 @@ export default class Index extends React.Component<undefined, IndexState> {
         return <span>Loading</span>
     }
 
-    private static moviesList(movies: Movie[]): JSX.Element {
+    private static moviesList(movies: Immutable.Map<string, Movie>): JSX.Element {
         return <MovieSelection movies={movies}/>
     }
 }

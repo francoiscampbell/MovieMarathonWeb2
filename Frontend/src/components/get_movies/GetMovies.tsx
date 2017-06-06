@@ -1,13 +1,15 @@
+import * as Immutable from 'immutable'
 import * as React from 'react'
 import axios from 'axios'
 
 import AddressForm from './AddressForm'
 import Header from '../Header'
 import {LatLng} from '../../data_model/LatLng'
+import {Movie} from '../../data_model/Movie'
 
 interface GetMoviesProps {
     onLoading: () => void
-    onMovies: (Array) => void
+    onMovies: (action: Immutable.Map<string, Movie>) => void
 }
 
 export default function GetMovies({onLoading, onMovies}: GetMoviesProps) {
@@ -20,7 +22,7 @@ export default function GetMovies({onLoading, onMovies}: GetMoviesProps) {
         }
         onLoading()
         axios.get('/movies', config)
-            .then(resp => onMovies(resp.data))
+            .then(resp => onMovies(Immutable.fromJS(resp.data)))
             .catch(error => console.log(error))
     }
 
