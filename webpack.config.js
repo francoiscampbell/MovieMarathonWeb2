@@ -4,11 +4,11 @@ module.exports = {
     entry: "./src/index.tsx",
     output: {
         filename: "bundle.js",
-        path: path.resolve('../MovieMarathon/static/')
+        path: path.resolve('./deploy/MovieMarathon/')
     },
 
     // Enable sourcemaps for debugging webpack's output.
-    devtool: "source-map",
+    devtool: "cheap-module-eval-source-map",
 
     resolve: {
         // Add '.ts' and '.tsx' as resolvable extensions.

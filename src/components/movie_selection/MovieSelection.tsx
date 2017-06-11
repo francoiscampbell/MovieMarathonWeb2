@@ -12,11 +12,11 @@ interface MovieSelectionProps {
 
 export default function MovieSelection({movies}: MovieSelectionProps) {
     const onSubmit = (selectedMovies: Immutable.Map<string, Movie>) => {
-        console.log('selectedMovies')
-        console.dir(selectedMovies.toJS())
         const availableTheatres = getAvailableTheatres(selectedMovies)
-        console.log('availableTheatres')
         console.dir(availableTheatres.toJS())
+        availableTheatres.forEach(theatre => {
+
+        })
     }
 
     if (movies.size === 0) {
