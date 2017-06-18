@@ -1,6 +1,7 @@
 import * as Immutable from 'immutable'
 import * as moment from 'moment'
 
+
 import {
     Movie,
     Theatre,
@@ -12,19 +13,20 @@ export function generateSchedules(movies: Immutable.List<Movie>): Immutable.List
     const sortByDelay = true
 
 
-
     const processedMovies = processMovies(movies)
     const availableTheatres = getAvailableTheatres(processedMovies)
 
-    const possibleSchedules = Immutable.List<Schedule>().asMutable()
-    const currentPermutation = Immutable.Stack<Movie>().asMutable()
-    availableTheatres.forEach(theatre => {
-        generateSchedule(theatre, processedMovies.toStack(), moment().subtract(1, 'months'), possibleSchedules, currentPermutation)
+    const possibleSchedules = Immutable.List<Schedule>().withMutations(possibleSchedules => {
+        const currentPermutation = Immutable.Stack<Movie>().asMutable()
+        availableTheatres.forEach(theatre => {
+            generateSchedule(theatre, processedMovies.toStack(), moment().subtract(1, 'months'), possibleSchedules, currentPermutation)
+        })
     })
+
     if (sortByDelay) {
-        sortSchedulesByDelay(possibleSchedules);
+        return sortSchedulesByDelay(possibleSchedules)
     }
-    return possibleSchedules.toList()
+    return possibleSchedules
 }
 
 function processMovies(movies: Immutable.List<Movie>): Immutable.List<Movie> {
@@ -79,7 +81,7 @@ function generateSchedule(theatre: Theatre,
         //end condition for recursive algorithm. check for empty to avoid generating a schedule if the list of desired movies is empty at the start
         const schedule = makeSchedule(theatre, currentPermutation.toList())
         if (validateSchedule(schedule)) {
-            possibleSchedules.unshift(schedule)
+            possibleSchedules.unshift(schedule.set('movies', schedule.get('movies').reverse()))
         }
         return
     }
@@ -90,7 +92,7 @@ function generateSchedule(theatre: Theatre,
             availableMovies = availableMovies.shift()
             currentPermutation = currentPermutation.unshift(
                 movie.delete('showtimes').set('showtime', showtime))
-            nextAvailableStartTime = nextAvailableStartTime.add(movie.get('runTime'))
+            nextAvailableStartTime = nextAvailableStartTime.clone().add(movie.get('runTime'))
             generateSchedule(theatre, availableMovies, nextAvailableStartTime, possibleSchedules, currentPermutation)
             currentPermutation.shift()
         }
@@ -108,7 +110,7 @@ function validateShowtime(showtime: moment.Moment, nextAvailableStartTime: momen
     return showtime.isAfter(nextAvailableStartTime) //add more validation logic
 }
 
-function makeSchedule(theatre: Theatre, movies: Immutable.List<Movie>) {
+function makeSchedule(theatre: Theatre, movies: Immutable.List<Movie>): Schedule {
     return Immutable.Map({
         theatre,
         movies
@@ -119,6 +121,27 @@ function validateSchedule(schedule: Schedule): boolean {
     return true
 }
 
-function sortSchedulesByDelay(schedules: Immutable.List<Schedule>) {
+function sortSchedulesByDelay(schedules: Immutable.List<Schedule>): Immutable.List<Schedule> {
+    return schedules.map(schedule => {
+        const movieStack = schedule.get('movies').toStack()
+        let previousMovie = movieStack.first()
+        let previousMovieShowtime: moment.Moment = previousMovie.get('showtime').clone()
+        const totalDelay = movieStack.shift().reduce((totalDelay, movie) => {
+            const showtime: moment.Moment = movie.get('showtime').clone()
+            const delay = showtime.diff(previousMovieShowtime.add(previousMovie.get('runTime')))
 
+            previousMovie = movie
+            previousMovieShowtime = showtime
+
+            return totalDelay.add(delay)
+        }, moment.duration(0))
+
+        return Immutable.Map({
+            schedule,
+            totalDelay
+        })
+    })
+        .sortBy(scheduleContainer => scheduleContainer.get('totalDelay'))
+        .map(scheduleContainer => scheduleContainer.get('schedule'))
+        .toList()
 }
