@@ -10,8 +10,8 @@ export class ListItem<K, V> {
 }
 
 interface SubmitCheckboxListProps {
-    items: Immutable.Iterable<string, ListItem<Movie, string>>
-    onSubmit: (selectedMovies: Immutable.Map<string, Movie>) => void
+    items: Immutable.Iterable<any, ListItem<Movie, string>>
+    onSubmit: (selectedMovies: Immutable.List<Movie>) => void
     sort: boolean
 }
 
@@ -28,7 +28,7 @@ export default function SubmitCheckboxList({items, onSubmit, sort}: SubmitCheckb
         onSubmit(_items
             .filter(item => item.selected)
             .map(item => item.item.key)
-            .toMap()
+            .toList()
         )
     }
 

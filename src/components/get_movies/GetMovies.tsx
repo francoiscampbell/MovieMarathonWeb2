@@ -9,7 +9,7 @@ import {Movie} from '../../data_model/Movie'
 
 interface GetMoviesProps {
     onLoading: () => void
-    onMovies: (action: Immutable.Map<string, Movie>) => void
+    onMovies: (action: Immutable.List<Movie>) => void
 }
 
 export default function GetMovies({onLoading, onMovies}: GetMoviesProps) {

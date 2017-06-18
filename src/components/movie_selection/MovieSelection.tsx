@@ -2,21 +2,17 @@ import * as Immutable from 'immutable'
 import * as React from 'react'
 
 import {Movie} from '../../data_model/Movie'
-import {getAvailableTheatres} from '../../scheduling/ScheduleGenerator'
+import {generateSchedules} from '../../scheduling/ScheduleGenerator'
 import SubmitCheckboxList, {ListItem} from './SubmitCheckboxList'
 
 
 interface MovieSelectionProps {
-    movies: Immutable.Map<string, Movie>
+    movies: Immutable.List<Movie>
 }
 
 export default function MovieSelection({movies}: MovieSelectionProps) {
-    const onSubmit = (selectedMovies: Immutable.Map<string, Movie>) => {
-        const availableTheatres = getAvailableTheatres(selectedMovies)
-        console.dir(availableTheatres.toJS())
-        availableTheatres.forEach(theatre => {
-
-        })
+    const onSubmit = (selectedMovies: Immutable.List<Movie>) => {
+        const schedules = generateSchedules(selectedMovies)
     }
 
     if (movies.size === 0) {
