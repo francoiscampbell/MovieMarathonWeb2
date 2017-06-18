@@ -1,18 +1,21 @@
 import * as Immutable from 'immutable'
 import * as React from 'react'
 
-import {Movie} from '../../data_model/Movie'
+import {Movie, Schedule} from '../../data_model/Movie'
 import {generateSchedules} from '../../scheduling/ScheduleGenerator'
 import SubmitCheckboxList, {ListItem} from './SubmitCheckboxList'
 
 
 interface MovieSelectionProps {
-    movies: Immutable.List<Movie>
+    movies: Immutable.List<Movie>,
+    onLoading: () => void,
+    onSchedules: (schedules: Immutable.List<Schedule>) => void
 }
 
-export default function MovieSelection({movies}: MovieSelectionProps) {
+export default function MovieSelection({movies, onLoading, onSchedules}: MovieSelectionProps) {
     const onSubmit = (selectedMovies: Immutable.List<Movie>) => {
-        const schedules = generateSchedules(selectedMovies)
+        onLoading()
+        onSchedules(generateSchedules(selectedMovies))
     }
 
     if (movies.size === 0) {

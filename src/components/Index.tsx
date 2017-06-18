@@ -2,40 +2,38 @@ import * as Immutable from 'immutable'
 import * as React from 'react'
 
 import GetMovies from './get_movies/GetMovies'
-import {Movie} from '../data_model/Movie'
 import MovieSelection from './movie_selection/MovieSelection'
+import SchedulesList from './schedules_list/SchedulesList'
+import {Movie, Schedule} from '../data_model/Movie'
 
 
 interface IndexState {
-    isLoadingMovies: boolean
-    movies: Immutable.List<Movie>
+    isLoading: boolean
+    movies: Immutable.List<Movie>,
+    schedules: Immutable.List<Schedule>
 }
 
 export default class Index extends React.Component<undefined, IndexState> {
 
     state = {
-        isLoadingMovies: false,
-        movies: null
+        isLoading: false,
+        movies: Immutable.List<Movie>(),
+        schedules: Immutable.List<Schedule>()
     }
 
     render() {
-        const {isLoadingMovies, movies} = this.state
+        const {isLoading, movies, schedules} = this.state
 
-        if (isLoadingMovies) {
+        if (isLoading) {
             return Index.loading()
         }
-        if (movies) {
-            return Index.moviesList(movies)
+        if (schedules.size > 0) {
+            return Index.schedulesList(schedules)
+        }
+        if (movies.size > 0) {
+            return this.moviesList(movies)
         }
         return this.getMovies()
-    }
-
-
-    private getMovies(): JSX.Element {
-        return <GetMovies
-            onLoading={() => this.setState({isLoadingMovies: true})}
-            onMovies={(movies) => this.setState({movies, isLoadingMovies: false})}
-        />
     }
 
 
@@ -43,7 +41,23 @@ export default class Index extends React.Component<undefined, IndexState> {
         return <span>Loading</span>
     }
 
-    private static moviesList(movies: Immutable.List<Movie>): JSX.Element {
-        return <MovieSelection movies={movies}/>
+
+    private getMovies(): JSX.Element {
+        return <GetMovies
+            onLoading={() => this.setState({isLoading: true})}
+            onMovies={movies => this.setState({movies, isLoading: false})}
+        />
+    }
+
+    private moviesList(movies: Immutable.List<Movie>): JSX.Element {
+        return <MovieSelection
+            movies={movies}
+            onLoading={() => this.setState({isLoading: true})}
+            onSchedules={schedules => this.setState({schedules, isLoading: false})}
+        />
+    }
+
+    private static schedulesList(schedules: Immutable.List<Schedule>): JSX.Element {
+        return <SchedulesList schedules={schedules} />
     }
 }
