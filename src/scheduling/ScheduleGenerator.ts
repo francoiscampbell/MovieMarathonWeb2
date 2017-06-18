@@ -35,9 +35,8 @@ function processMovies(movies: Immutable.List<Movie>): Immutable.List<Movie> {
             .set('runTime', moment.duration(movie.get('runTime')))
             .set('showtimes', movie
                 .get('showtimes')
-                .map(showtime => {
-                    return showtime.set('dateTime', moment(showtime.get('dateTime')))
-                }))
+                .map(s => s.set('dateTime', moment(s.get('dateTime'))))
+                .sortBy(s => s.get('dateTime')))
     }).toList()
 }
 
@@ -89,11 +88,9 @@ function generateSchedule(theatre: Theatre,
         let showtime
         let nextAvailableStartTime = startTime
         while ((showtime = findNextShowtimeForMovie(movie, nextAvailableStartTime)) != null) {
-            availableMovies = availableMovies.shift()
-            currentPermutation = currentPermutation.unshift(
-                movie.delete('showtimes').set('showtime', showtime))
-            nextAvailableStartTime = nextAvailableStartTime.clone().add(movie.get('runTime'))
-            generateSchedule(theatre, availableMovies, nextAvailableStartTime, possibleSchedules, currentPermutation)
+            currentPermutation = currentPermutation.unshift(movie.delete('showtimes').set('showtime', showtime))
+            nextAvailableStartTime = showtime.clone().add(movie.get('runTime'))
+            generateSchedule(theatre, availableMovies.shift(), nextAvailableStartTime, possibleSchedules, currentPermutation)
             currentPermutation.shift()
         }
     })
@@ -102,7 +99,6 @@ function generateSchedule(theatre: Theatre,
 function findNextShowtimeForMovie(movie: Movie, nextAvailableStartTime: moment.Moment): moment.Moment {
     return movie.get('showtimes')
         .map(s => s.get('dateTime'))
-        .sort()
         .find(showtime => validateShowtime(showtime, nextAvailableStartTime))
 }
 
