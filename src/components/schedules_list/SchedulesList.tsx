@@ -8,11 +8,15 @@ interface SchedulesListProps {
 
 export default function SchedulesList({schedules}: SchedulesListProps) {
     const items = schedules.map((schedule, index) => {
-        const movies = schedule.get('movies').map(movie => {
+        const movies = schedule.get('movies').map((movie, index) => {
+            const delay = schedule.getIn(['delays', index])
+            const overlapOrDelay = delay < 0 ? 'Overlap' : 'Delay'
+            const delayOrOverlapText = delay ? <p>{overlapOrDelay} of {delay.humanize()}</p> : null
             return (
                 <div>
-                    <p>{movie.get('title')}</p>
-                    <p>{movie.get('showtime').toString()}</p>
+                    <span>{movie.get('title')}</span>
+                    <span>{movie.get('showtime').toString()}</span>
+                    {delayOrOverlapText}
                 </div>
             )
         })

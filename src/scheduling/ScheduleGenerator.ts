@@ -17,9 +17,14 @@ export function generateSchedules(movies: Immutable.List<Movie>): Immutable.List
     const availableTheatres = getAvailableTheatres(processedMovies)
 
     const possibleSchedules = Immutable.List<Schedule>().withMutations(possibleSchedules => {
-        const currentPermutation = Immutable.Stack<Movie>().asMutable()
         availableTheatres.forEach(theatre => {
-            generateSchedule(theatre, processedMovies.toStack(), moment().subtract(1, 'months'), possibleSchedules, currentPermutation)
+            generateSchedule(
+                theatre,
+                processedMovies,
+                moment().subtract(1, 'months'),
+                possibleSchedules,
+                Immutable.List<Movie>().asMutable()
+            )
         })
     })
 
@@ -72,15 +77,15 @@ function getAvailableTheatres(movies: Immutable.List<Movie>): Immutable.Map<any,
 }
 
 function generateSchedule(theatre: Theatre,
-                          availableMovies: Immutable.Stack<Movie>,
+                          availableMovies: Immutable.List<Movie>,
                           startTime: moment.Moment,
                           possibleSchedules: Immutable.List<Schedule>, //mutable
-                          currentPermutation: Immutable.Stack<Movie>): Immutable.List<Schedule> { //mutable
+                          currentPermutation: Immutable.List<Movie>): Immutable.List<Schedule> { //mutable
     if (availableMovies.size == 0 && !currentPermutation.isEmpty()) {
         //end condition for recursive algorithm. check for empty to avoid generating a schedule if the list of desired movies is empty at the start
-        const schedule = makeSchedule(theatre, currentPermutation.toList())
+        const schedule = makeSchedule(theatre, listCopy(currentPermutation))
         if (validateSchedule(schedule)) {
-            possibleSchedules.unshift(schedule.set('movies', schedule.get('movies').reverse()))
+            possibleSchedules.unshift(schedule)
         }
         return
     }
@@ -88,10 +93,10 @@ function generateSchedule(theatre: Theatre,
         let showtime
         let nextAvailableStartTime = startTime
         while ((showtime = findNextShowtimeForMovie(movie, nextAvailableStartTime)) != null) {
-            currentPermutation = currentPermutation.unshift(movie.delete('showtimes').set('showtime', showtime))
+            currentPermutation.push(movie.delete('showtimes').set('showtime', showtime))
             nextAvailableStartTime = showtime.clone().add(movie.get('runTime'))
             generateSchedule(theatre, availableMovies.shift(), nextAvailableStartTime, possibleSchedules, currentPermutation)
-            currentPermutation.shift()
+            currentPermutation.pop()
         }
     })
 }
@@ -107,9 +112,29 @@ function validateShowtime(showtime: moment.Moment, nextAvailableStartTime: momen
 }
 
 function makeSchedule(theatre: Theatre, movies: Immutable.List<Movie>): Schedule {
+    const sortedMovies = movies.sortBy(m => m.get('showtime')).toList()
+
+    let previousMovie = sortedMovies.first()
+    let previousMovieShowtime: moment.Moment = previousMovie.get('showtime').clone()
+
+    const totalDelay = moment.duration(0)
+    const delays = sortedMovies.shift().map(movie => {
+        const showtime: moment.Moment = movie.get('showtime').clone()
+        const delay = showtime.diff(previousMovieShowtime.add(previousMovie.get('runTime')))
+        const delayDuration = moment.duration(delay)
+
+        previousMovie = movie
+        previousMovieShowtime = showtime
+
+        totalDelay.add(delayDuration)
+        return delayDuration
+    })
+
     return Immutable.Map({
         theatre,
-        movies
+        movies: sortedMovies,
+        delays,
+        totalDelay
     })
 }
 
@@ -118,26 +143,29 @@ function validateSchedule(schedule: Schedule): boolean {
 }
 
 function sortSchedulesByDelay(schedules: Immutable.List<Schedule>): Immutable.List<Schedule> {
-    return schedules.map(schedule => {
-        const movieStack = schedule.get('movies').toStack()
-        let previousMovie = movieStack.first()
-        let previousMovieShowtime: moment.Moment = previousMovie.get('showtime').clone()
-        const totalDelay = movieStack.shift().reduce((totalDelay, movie) => {
-            const showtime: moment.Moment = movie.get('showtime').clone()
-            const delay = showtime.diff(previousMovieShowtime.add(previousMovie.get('runTime')))
+    return schedules
+        .sort((a, b) => {
+            const totalDelayA = a.get('totalDelay')
+            const totalDelayB = b.get('totalDelay')
+            const diff = totalDelayA - totalDelayB
+            if (diff !== 0) {
+                return diff
+            }
 
-            previousMovie = movie
-            previousMovieShowtime = showtime
-
-            return totalDelay.add(delay)
-        }, moment.duration(0))
-
-        return Immutable.Map({
-            schedule,
-            totalDelay
+            const startTimeA = a.getIn(['movies', 0, 'showtime'])
+            const startTimeB = b.getIn(['movies', 0, 'showtime'])
+            if (startTimeA.isBefore(startTimeB)) {
+                return -1
+            }
+            if (startTimeA.isAfter(startTimeB)) {
+                return 1
+            }
+            return 0
         })
-    })
-        .sortBy(scheduleContainer => scheduleContainer.get('totalDelay'))
-        .map(scheduleContainer => scheduleContainer.get('schedule'))
         .toList()
 }
+
+function listCopy<T>(list: Immutable.List<T>): Immutable.List<T> {
+    return list.map(item => item).toList()
+}
+
