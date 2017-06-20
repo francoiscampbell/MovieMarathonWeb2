@@ -1,6 +1,8 @@
 import * as Immutable from 'immutable'
 import * as React from 'react'
-import {Schedule} from "../../data_model/Movie"
+import {Schedule} from "../../../data_model/Movie"
+
+import * as styles from './styles.scss'
 
 interface SchedulesListProps {
     schedules: Immutable.List<Schedule>
@@ -14,8 +16,8 @@ export default function SchedulesList({schedules}: SchedulesListProps) {
             const delayOrOverlapText = delay ? <p>{overlapOrDelay} of {delay.humanize()}</p> : null
             return (
                 <div>
-                    <span>{movie.get('title')}</span>
-                    <span>{movie.get('showtime').toString()}</span>
+                    <span className={styles.movieTitle}>{movie.get('title')}</span>
+                    <span className={styles.showtime}>{movie.get('showtime').toString()}</span>
                     {delayOrOverlapText}
                 </div>
             )
@@ -28,7 +30,7 @@ export default function SchedulesList({schedules}: SchedulesListProps) {
         )
     })
 
-    const colon = schedules.size == 0 ? "schedules." : "schedules:"
+    const colon = schedules.size == 0 ? "schedules" : "schedules:"
     return (
         <div>
             <h1>Generated {schedules.size} {colon}</h1>

@@ -17,8 +17,8 @@ export default class Index extends React.Component<undefined, IndexState> {
 
     state = {
         isLoading: false,
-        movies: Immutable.List<Movie>(),
-        schedules: Immutable.List<Schedule>()
+        movies: null,
+        schedules: null
     }
 
     render() {
@@ -27,10 +27,10 @@ export default class Index extends React.Component<undefined, IndexState> {
         if (isLoading) {
             return Index.loading()
         }
-        if (schedules.size > 0) {
+        if (schedules) {
             return Index.schedulesList(schedules)
         }
-        if (movies.size > 0) {
+        if (movies) {
             return this.moviesList(movies)
         }
         return this.getMovies()
