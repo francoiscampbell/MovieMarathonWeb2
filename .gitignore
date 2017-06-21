@@ -1,4 +1,4 @@
-deploy/default.conf
+deploy/secrets.conf
 deploy/MovieMarathon/bundle.js
 deploy/MovieMarathon/index.html
 

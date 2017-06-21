@@ -16,6 +16,9 @@ export default function SchedulesList({schedules}: SchedulesListProps) {
             const delayOrOverlapText = delay ? <p>{overlapOrDelay} of {delay.humanize()}</p> : null
             return (
                 <div>
+                    <div>
+                        <img src={movie.get('')}/>
+                    </div>
                     <span className={styles.movieTitle}>{movie.get('title')}</span>
                     <span className={styles.showtime}>{movie.get('showtime').toString()}</span>
                     {delayOrOverlapText}

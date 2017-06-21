@@ -4,8 +4,9 @@
   "description": "Movie Marathon React Frontend",
   "main": "index.js",
   "scripts": {
-    "docker": "docker build -t mmw ./deploy && docker run -p 8080:80 -v $(pwd)/deploy//MovieMarathon:/usr/share/nginx/MovieMarathon -d mmw",
-    "docker-cleanup": "IMAGE=$(docker ps -q -f 'ancestor=mmw'); docker stop $IMAGE && docker rm $IMAGE",
+    "docker-dev": "TAG=fcampbell/moviemarathon-dev; docker build -t $TAG -f ./deploy/Dockerfile-dev ./deploy && docker run -p 8080:80 -v $(pwd)/deploy//MovieMarathon:/usr/share/nginx/MovieMarathon -d $TAG",
+    "docker-prod": "TAG=fcampbell/moviemarathon; docker build -t $TAG -f ./deploy/Dockerfile-prod ./deploy",
+    "docker-cleanup": "TAG=fcampbell/moviemarathon-dev; IMAGE=$(docker ps -q -f ancestor=$TAG); docker stop $IMAGE && docker rm $IMAGE",
     "test": "test",
     "watch": "node node_modules/webpack/bin/webpack.js --watch",
     "webpack": "node node_modules/webpack/bin/webpack.js"

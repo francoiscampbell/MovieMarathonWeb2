@@ -21,7 +21,7 @@ export default function GetMovies({onLoading, onMovies}: GetMoviesProps) {
             }
         }
         onLoading()
-        axios.get('/mock/movies/showings', config)
+        axios.get('/tms/mock/movies/showings', config)
             .then(resp => onMovies(Immutable.fromJS(resp.data)))
             .catch(error => console.log(error))
     }

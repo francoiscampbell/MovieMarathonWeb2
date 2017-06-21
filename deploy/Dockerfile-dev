@@ -3,4 +3,5 @@ FROM nginx
 EXPOSE 80
 
 COPY default.conf /etc/nginx/conf.d/default.conf
+COPY secrets.conf /etc/nginx/secrets.conf
 VOLUME /usr/share/nginx/MovieMarathon
