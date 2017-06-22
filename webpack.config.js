@@ -1,7 +1,9 @@
 const path = require('path');
 
 module.exports = {
-    entry: './src/index.tsx',
+    entry: [
+        './src/index.tsx'
+    ],
     output: {
         filename: 'bundle.js',
         path: path.resolve('./deploy/MovieMarathon/')
@@ -43,6 +45,12 @@ module.exports = {
                     sourceMap: true
                 }
             }]
+        },{
+            test: /\.css$/,
+            loader: "style-loader!css-loader?importLoaders=1"
+        }, {
+            test: /\.(png|woff|woff2|eot|ttf|svg)$/,
+            loader: 'url-loader?limit=100000'
         }]
     },
 

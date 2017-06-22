@@ -5,6 +5,7 @@ import {
     Movie,
     Schedule
 } from "../../../data_model/Movie"
+import Timeline from 'react-visjs-timeline'
 
 import * as styles from './styles.scss'
 import {generateSchedules} from "../../../scheduling/ScheduleGenerator"
@@ -28,39 +29,56 @@ export default class SchedulesList extends React.PureComponent<SchedulesListProp
         if (this.state.imageUrlsToFetch === -1) {
             this.fetchImageUrls()
         }
-        const items = this.props.schedules.map((schedule, index) => {
-            const movies = schedule.get('movies').map((movie, index) => {
-                const delay = schedule.getIn(['delays', index])
-                const overlapOrDelay = delay < 0 ? 'Overlap' : 'Delay'
-                const delayOrOverlapText = delay ? <p>{overlapOrDelay} of {delay.humanize()}</p> : null
-                return (
-                    <div>
-                        <img
-                            className={styles.moviePoster}
-                            src={this.state.imageUrls.get(movie)}
-                        />
-                        <span className={styles.movieTitle}>{movie.get('title')}</span>
-                        <span className={styles.showtime}>{movie.get('showtime').toString()}</span>
-                        {delayOrOverlapText}
-                    </div>
-                )
+
+        const options = {
+            format: {
+                minorLabels: {
+                    minute: 'h:mma',
+                    hour: 'ha'
+                }
+            },
+            orientation: 'both',
+            showCurrentTime: true,
+            showMajorLabels: true,
+            stack: false,
+            zoomKey: 'ctrlKey'
+        }
+
+        const items = this.props.schedules.flatMap((schedule, index) => {
+            return schedule.get('movies').map(movie => {
+                const startTime = movie.get('showtime')
+                const endTime = startTime.clone().add(movie.get('runTime'))
+                const title = movie.get('title')
+                return {
+                    content: title,
+                    end: endTime,
+                    group: index + 1,
+                    start: startTime,
+                    type: 'range'
+                }
             })
-            return (
-                <div>
-                    <h2>Schedule {index + 1} at {schedule.getIn(['theatre', 'name'])}:</h2>
-                    {movies}
-                </div>
-            )
         })
 
-        const colon = this.props.schedules.size == 0 ? "schedules" : "schedules:"
+        const groups = this.props.schedules.map((schedule, index) => {
+            return {
+                id: index + 1,
+                content: schedule.getIn(['theatre', 'name'])
+            }
+        }).toJS()
+
+
+        const colon = this.props.schedules.size > 0 ? ':' : ''
         return (
             <div>
-                <h1>Generated {this.props.schedules.size} {colon}</h1>
-                {items}
+                <h1>Generated {this.props.schedules.size} schedules{colon}</h1>
+                <Timeline
+                    groups={groups}
+                    items={items.toJS()}
+                    options={options}
+                />
                 <span>
-                    Movie posters from <a href="https://www.themoviedb.org">TMDb</a>
-                </span>
+                     Movie posters from <a href="https://www.themoviedb.org">TMDb</a>
+                 </span>
             </div>
         )
     }
