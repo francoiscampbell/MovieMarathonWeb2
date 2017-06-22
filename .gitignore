@@ -1,6 +1,6 @@
-deploy/secrets.conf
+deploy/default.conf
 deploy/MovieMarathon/bundle.js
-deploy/MovieMarathon/index.html
+deploy/MovieMarathon/bundle.js.map
 
 # Created by .ignore support plugin (hsz.mobi)
 ### Python template
