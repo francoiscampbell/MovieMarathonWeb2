@@ -3,7 +3,7 @@ import * as React from 'react'
 
 import {Movie, Schedule} from '../../data_model/Movie'
 import {generateSchedules} from '../../scheduling/ScheduleGenerator'
-import SubmitCheckboxList, {ListItem} from './SubmitCheckboxList'
+import SubmitCheckboxList from './SubmitCheckboxList'
 
 
 interface MovieSelectionProps {
@@ -13,20 +13,18 @@ interface MovieSelectionProps {
 }
 
 export default function MovieSelection({movies, onLoading, onSchedules}: MovieSelectionProps) {
-    const onSubmit = (selectedMovies: Immutable.List<Movie>) => {
+    const onSubmit = (selectedIndices: Immutable.List<number>) => {
         onLoading()
+        const selectedMovies = selectedIndices.map(index => {
+            return movies.get(index)
+        }).toList()
         onSchedules(generateSchedules(selectedMovies))
     }
 
     if (movies.size === 0) {
         return <h1>No movies found near that location</h1>
     }
-    const titles = movies.map(movie => {
-        movie.toString = function () {
-            return this.get('title')
-        }
-        return new ListItem<Movie, string>(movie, movie.toString())
-    })
+    const titles = movies.map(movie => movie.get('title')).toList()
     return (
         <SubmitCheckboxList
             items={titles}

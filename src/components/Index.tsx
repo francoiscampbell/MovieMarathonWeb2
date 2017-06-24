@@ -2,6 +2,7 @@ import * as Immutable from 'immutable'
 import * as React from 'react'
 
 import GetMovies from './get_movies/GetMovies'
+import Loading from "./Loading"
 import MovieSelection from './movie_selection/MovieSelection'
 import SchedulesList from './schedules_list/SchedulesList'
 import {Movie, Schedule} from '../data_model/Movie'
@@ -38,7 +39,7 @@ export default class Index extends React.Component<undefined, IndexState> {
 
 
     private static loading(): JSX.Element {
-        return <span>Loading</span>
+        return <Loading text="Loading"/>
     }
 
 

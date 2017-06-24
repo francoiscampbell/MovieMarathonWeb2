@@ -2,6 +2,7 @@ import * as React from 'react'
 
 import {FormEvent} from 'react'
 import PlacesAutocomplete, {geocodeByAddress, getLatLng} from 'react-places-autocomplete'
+import RaisedButton from "material-ui/RaisedButton"
 
 
 interface AddressFormProps {
@@ -27,7 +28,11 @@ export default class AddressForm extends React.Component<AddressFormProps, Addre
         return (
             <form onSubmit={this.handleFormSubmit}>
                 <PlacesAutocomplete inputProps={inputProps}/>
-                <button type="submit">Submit</button>
+                <RaisedButton
+                    fullWidth={true}
+                    label="Submit"
+                    type="submit"
+                />
             </form>
         )
     }

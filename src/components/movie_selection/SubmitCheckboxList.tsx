@@ -1,72 +1,65 @@
 import * as Immutable from 'immutable'
 import * as React from 'react'
 
-import {Movie} from '../../data_model/Movie'
+import Checkbox from 'material-ui/Checkbox'
+import * as List from 'material-ui/List'
+import {ListItem} from 'material-ui/List'
+import RaisedButton from "material-ui/RaisedButton"
 
-
-export class ListItem<K, V> {
-    constructor(public readonly key: K, public readonly value: V) {
-    }
-}
 
 interface SubmitCheckboxListProps {
-    items: Immutable.Iterable<any, ListItem<Movie, string>>
-    onSubmit: (selectedMovies: Immutable.List<Movie>) => void
+    items: Immutable.List<any>
+    onSubmit: (selectedIndices: Immutable.List<number>) => void
     sort: boolean
 }
 
-export default function SubmitCheckboxList({items, onSubmit, sort}: SubmitCheckboxListProps) {
-    const sortedItems = sort ? items.sortBy(item => item.value) : items
-    const _items = sortedItems.map(item => {
-        return {
-            item,
-            selected: false
-        }
-    })
+export default function SubmitCheckboxList({items, onSubmit}: SubmitCheckboxListProps) {
+    let selected = items.map(_ => false).toMap()
 
     const _onSubmit = () => {
-        onSubmit(_items
-            .filter(item => item.selected)
-            .map(item => item.item.key)
+        onSubmit(selected
+            .filter(item => item)
+            .keySeq()
             .toList()
         )
     }
 
     const onCheckboxChange = (index, checked) => {
-        _items.get(index).selected = checked
+        selected = selected.set(index, checked)
     }
 
-    const elements = sortedItems.map((item, index) => {
+    const listItems = items.map((item, index) => {
         return (
-            <li>
-                <ListItemCheckbox
-                    index={index}
-                    onChange={onCheckboxChange}
-                />
-                {item.value || item.toString()}
-            </li>
+            <ListItemCheckbox
+                index={index}
+                key={index}
+                label={item}
+                onChange={onCheckboxChange}/>
         )
     })
 
     return (
         <div>
-            <ul>
-                {elements}
-            </ul>
-            <button
+            {listItems}
+            <RaisedButton
+                fullWidth={true}
+                label="Submit"
                 onClick={_onSubmit}
-            >
-                Submit
-            </button>
+                type="submit"
+            />
         </div>
     )
 }
 
 interface ListItemCheckboxProps {
     index: number | string
+    label: string
     onChange: (number, boolean) => void
 }
 
-function ListItemCheckbox({index, onChange}: ListItemCheckboxProps) {
-    return <input type="checkbox" onChange={event => onChange(index, event.target.checked)}/>
+function ListItemCheckbox({index, label, onChange}: ListItemCheckboxProps) {
+    return <Checkbox
+        label={label}
+        onCheck={event => onChange(index, event.target.checked)}
+    />
 }
