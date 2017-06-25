@@ -1,14 +1,14 @@
 import * as Immutable from 'immutable'
 import * as React from 'react'
+
 import axios from 'axios'
+import * as humanizeDuration from 'humanize-duration'
 import {
     Movie,
     Schedule
 } from "../../../data_model/Movie"
 import Timeline from 'react-visjs-timeline'
 
-import * as styles from './styles.scss'
-import {generateSchedules} from "../../../scheduling/ScheduleGenerator"
 
 interface SchedulesListProps {
     schedules: Immutable.List<Schedule>
@@ -30,7 +30,7 @@ export default class SchedulesList extends React.PureComponent<SchedulesListProp
     }
 
     render() {
-        const options = {
+        const visOptions = {
             format: {
                 minorLabels: {
                     minute: 'h:mma',
@@ -38,23 +38,43 @@ export default class SchedulesList extends React.PureComponent<SchedulesListProp
                 }
             },
             orientation: 'both',
-            showCurrentTime: true,
+            showCurrentTime: false,
             showMajorLabels: true,
             stack: false,
+            tooltip: {
+                followMouse: true
+            },
+            type: 'range',
+            verticalScroll: true,
             zoomKey: 'ctrlKey'
         }
 
-        const items = this.props.schedules.flatMap((schedule, index) => {
-            return schedule.get('movies').map(movie => {
+        const items = this.props.schedules.flatMap((schedule, scheduleIndex) => {
+            return schedule.get('movies').map((movie, movieIndex) => {
                 const startTime = movie.get('showtime')
-                const endTime = startTime.clone().add(movie.get('runTime'))
+                const runTime = movie.get('runTime')
+                const endTime = startTime.clone().add(runTime)
+                const delay = schedule.getIn(['delays', movieIndex])
+                const delayHtml = delay ? `<div>Delay until next movie: ${humanizeDuration(delay)}</div>` : ''
+
                 const title = movie.get('title')
+                const theatre = schedule.getIn(['theatre', 'name'])
+                const tooltip = `
+                    <div>
+                        <div><h3>${title}</h3></div>
+                        <div><h4>${theatre}</h4></div>
+                        <div>Start time: ${startTime.format('dddd MMMM D YYYY, h:mm a')}</div> 
+                        <div>Run time: ${humanizeDuration(runTime)}</div> 
+                        <div>End time: ${endTime.format('dddd MMMM D YYYY, h:mm a')}</div> 
+                        ${delayHtml}
+                    </div>
+                `
                 return {
                     content: title,
                     end: endTime,
-                    group: index + 1,
+                    group: scheduleIndex + 1,
                     start: startTime,
-                    type: 'range'
+                    title: tooltip
                 }
             })
         })
@@ -73,7 +93,7 @@ export default class SchedulesList extends React.PureComponent<SchedulesListProp
             <Timeline
                 groups={groups}
                 items={items.toJS()}
-                options={options}
+                options={visOptions}
             />) : null
         const attribution = hasSchedules ? (
             <span>

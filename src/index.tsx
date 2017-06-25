@@ -4,6 +4,7 @@ import * as React from 'react'
 import * as ReactDOM from 'react-dom'
 
 import Index from './components/Index'
+//noinspection TypeScriptCheckImport
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 
 injectTapEventPlugin()

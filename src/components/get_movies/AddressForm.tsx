@@ -1,6 +1,7 @@
 import * as React from 'react'
 
 import {FormEvent} from 'react'
+//noinspection TypeScriptCheckImport
 import PlacesAutocomplete, {geocodeByAddress, getLatLng} from 'react-places-autocomplete'
 import RaisedButton from "material-ui/RaisedButton"
 

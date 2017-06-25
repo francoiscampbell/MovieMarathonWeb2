@@ -2,7 +2,7 @@ import * as Immutable from 'immutable'
 import * as React from 'react'
 
 import Checkbox from 'material-ui/Checkbox'
-import * as List from 'material-ui/List'
+//noinspection TypeScriptCheckImport
 import {ListItem} from 'material-ui/List'
 import RaisedButton from "material-ui/RaisedButton"
 

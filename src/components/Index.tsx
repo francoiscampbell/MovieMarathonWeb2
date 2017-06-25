@@ -1,6 +1,7 @@
 import * as Immutable from 'immutable'
 import * as React from 'react'
 
+import Card from 'material-ui/Card'
 import GetMovies from './get_movies/GetMovies'
 import Loading from "./Loading"
 import MovieSelection from './movie_selection/MovieSelection'
@@ -23,6 +24,22 @@ export default class Index extends React.Component<undefined, IndexState> {
     }
 
     render() {
+        return (
+            <Card
+                containerStyle={{
+                    padding: '32px'
+                }}
+                style={{
+                    maxWidth: '960px',
+                    margin: 'auto',
+                }}
+            >
+                {this.getContent()}
+            </Card>
+        )
+    }
+
+    getContent() {
         const {isLoading, movies, schedules} = this.state
 
         if (isLoading) {
@@ -46,7 +63,12 @@ export default class Index extends React.Component<undefined, IndexState> {
     private getMovies(): JSX.Element {
         return <GetMovies
             onLoading={() => this.setState({isLoading: true})}
-            onMovies={movies => this.setState({movies, isLoading: false})}
+            onMovies={movies =>
+                this.setState({
+                    movies: movies.sortBy(movie => movie.get('title')).toList(),
+                    isLoading: false
+                })
+            }
         />
     }
 
@@ -59,6 +81,6 @@ export default class Index extends React.Component<undefined, IndexState> {
     }
 
     private static schedulesList(schedules: Immutable.List<Schedule>): JSX.Element {
-        return <SchedulesList schedules={schedules} />
+        return <SchedulesList schedules={schedules}/>
     }
 }

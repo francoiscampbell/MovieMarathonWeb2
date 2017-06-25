@@ -11,12 +11,12 @@ interface LoadingProps {
 export default class Loading extends React.Component<LoadingProps, any> {
     render() {
         return (
-            <Dialog open>
+            <div>
                 <CircularProgress/>
                 <span className={styles.text}>
                     {this.props.text}
                 </span>
-            </Dialog>
+            </div>
         )
     }
 }
