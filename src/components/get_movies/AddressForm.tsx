@@ -4,7 +4,6 @@ import {FormEvent} from "react"
 import DatePicker from "material-ui/DatePicker"
 import * as moment from "moment"
 //noinspection TypeScriptCheckImport
-import PlacesAutocomplete, {geocodeByAddress, getLatLng} from "react-places-autocomplete"
 import RaisedButton from "material-ui/RaisedButton"
 import GooglePlaceAutocomplete from 'material-ui-autocomplete-google-places'
 

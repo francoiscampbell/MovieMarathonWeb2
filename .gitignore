@@ -2,6 +2,8 @@ deploy/default.conf
 deploy/MovieMarathon/bundle.js
 deploy/MovieMarathon/bundle.js.map
 
+*.scss.d.ts
+
 # Created by .ignore support plugin (hsz.mobi)
 ### Python template
 # Byte-compiled / optimized / DLL files

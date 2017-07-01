@@ -1,7 +1,7 @@
 import * as Immutable from "immutable"
 import * as React from "react"
-
 import Card from "material-ui/Card"
+
 import GetMovies from "./get_movies/GetMovies"
 import Loading from "./Loading"
 import MovieSelection from "./movie_selection/MovieSelection"
