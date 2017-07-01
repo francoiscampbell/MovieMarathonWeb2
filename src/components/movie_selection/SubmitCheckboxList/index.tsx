@@ -1,11 +1,13 @@
 import * as Immutable from "immutable"
 import * as React from "react"
+import {FormEvent} from "react"
 
 import Checkbox from "material-ui/Checkbox"
 //noinspection TypeScriptCheckImport
 import {ListItem} from "material-ui/List"
 import RaisedButton from "material-ui/RaisedButton"
 
+import * as styles from './submitcheckboxlist.scss'
 
 interface SubmitCheckboxListProps {
     items: Immutable.List<any>
@@ -16,7 +18,8 @@ interface SubmitCheckboxListProps {
 export default function SubmitCheckboxList({items, onSubmit}: SubmitCheckboxListProps) {
     let selected = items.map(_ => false).toMap()
 
-    const _onSubmit = () => {
+    const handleFormSubmit = (event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault()
         onSubmit(selected
             .filter(item => item)
             .keySeq()
@@ -39,15 +42,15 @@ export default function SubmitCheckboxList({items, onSubmit}: SubmitCheckboxList
     })
 
     return (
-        <div>
+        <form onSubmit={handleFormSubmit}>
             {listItems}
             <RaisedButton
+                className={styles.submitbutton}
                 fullWidth={true}
                 label="Submit"
-                onClick={_onSubmit}
                 type="submit"
             />
-        </div>
+        </form>
     )
 }
 
