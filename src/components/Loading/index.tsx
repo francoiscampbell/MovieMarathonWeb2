@@ -1,8 +1,7 @@
 import * as React from "react"
-import CircularProgress from 'material-ui/CircularProgress'
-import Dialog from 'material-ui/Dialog'
+import CircularProgress from "material-ui/CircularProgress"
 
-import * as styles from './loading.scss'
+import * as styles from "./loading.scss"
 
 interface LoadingProps {
     text: string

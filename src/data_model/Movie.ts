@@ -1,5 +1,4 @@
-import * as Immutable from 'immutable'
-import * as moment from 'moment'
+import * as Immutable from "immutable"
 
 
 export type Movie = Immutable.Map<string, any>

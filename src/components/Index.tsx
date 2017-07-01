@@ -1,12 +1,12 @@
-import * as Immutable from 'immutable'
-import * as React from 'react'
+import * as Immutable from "immutable"
+import * as React from "react"
 
-import Card from 'material-ui/Card'
-import GetMovies from './get_movies/GetMovies'
+import Card from "material-ui/Card"
+import GetMovies from "./get_movies/GetMovies"
 import Loading from "./Loading"
-import MovieSelection from './movie_selection/MovieSelection'
-import SchedulesList from './schedules_list/SchedulesList'
-import {Movie, Schedule} from '../data_model/Movie'
+import MovieSelection from "./movie_selection/MovieSelection"
+import SchedulesList from "./schedules_list/SchedulesList"
+import {Movie, Schedule} from "../data_model/Movie"
 
 
 interface IndexState {

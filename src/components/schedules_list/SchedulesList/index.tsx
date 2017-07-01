@@ -1,13 +1,10 @@
-import * as Immutable from 'immutable'
-import * as React from 'react'
+import * as Immutable from "immutable"
+import * as React from "react"
 
-import axios from 'axios'
-import * as humanizeDuration from 'humanize-duration'
-import {
-    Movie,
-    Schedule
-} from "../../../data_model/Movie"
-import Timeline from 'react-visjs-timeline'
+import axios from "axios"
+import * as humanizeDuration from "humanize-duration"
+import {Movie, Schedule} from "../../../data_model/Movie"
+import Timeline from "react-visjs-timeline"
 
 
 interface SchedulesListProps {

@@ -1,9 +1,9 @@
-import * as Immutable from 'immutable'
-import * as React from 'react'
+import * as Immutable from "immutable"
+import * as React from "react"
 
-import {Movie, Schedule} from '../../data_model/Movie'
-import {generateSchedules} from '../../scheduling/ScheduleGenerator'
-import SubmitCheckboxList from './SubmitCheckboxList'
+import {Movie, Schedule} from "../../data_model/Movie"
+import {generateSchedules} from "../../scheduling/ScheduleGenerator"
+import SubmitCheckboxList from "./SubmitCheckboxList"
 
 
 interface MovieSelectionProps {

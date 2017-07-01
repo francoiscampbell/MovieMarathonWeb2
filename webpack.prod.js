@@ -11,7 +11,7 @@ module.exports = {
     },
 
     // Enable sourcemaps for debugging webpack's output.
-    devtool: 'cheap-module-eval-source-map',
+    devtool: 'source-map',
 
     resolve: {
         // Add '.ts' and '.tsx' as resolvable extensions.
@@ -55,8 +55,19 @@ module.exports = {
         }]
     },
     plugins:[
+        new webpack.optimize.UglifyJsPlugin({
+            sourceMap: options.devtool && (options.devtool.indexOf("sourcemap") >= 0 || options.devtool.indexOf("source-map") >= 0)
+        }),
         new webpack.DefinePlugin({
-            'process.env.NODE_ENV': JSON.stringify('development')
+            'process.env.NODE_ENV': JSON.stringify('production')
         })
-    ]
+    ],
+    // When importing a module whose path matches one of the following, just
+    // assume a corresponding global variable exists and use that instead.
+    // This is important because it allows us to avoid bundling all of our
+    // dependencies, which allows browsers to cache those libraries between builds.
+    externals: {
+        'react': 'React',
+        'react-dom': 'ReactDOM'
+    }
 };

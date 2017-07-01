@@ -1,12 +1,8 @@
-import * as Immutable from 'immutable'
-import * as moment from 'moment'
+import * as Immutable from "immutable"
+import * as moment from "moment"
 
 
-import {
-    Movie,
-    Theatre,
-    Schedule
-} from '../data_model/Movie'
+import {Movie, Schedule, Theatre} from "../data_model/Movie"
 
 
 export function generateSchedules(movies: Immutable.List<Movie>): Immutable.List<Schedule> {
