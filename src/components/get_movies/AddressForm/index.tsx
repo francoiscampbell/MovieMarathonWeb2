@@ -4,7 +4,9 @@ import {FormEvent} from 'react'
 //noinspection TypeScriptCheckImport
 import PlacesAutocomplete, {geocodeByAddress, getLatLng} from 'react-places-autocomplete'
 import RaisedButton from "material-ui/RaisedButton"
+import GooglePlaceAutocomplete from 'material-ui-autocomplete-google-places'
 
+import * as styles from './addressform.scss'
 
 interface AddressFormProps {
     onGeocodeSuccess: (LatLng) => void
@@ -12,23 +14,40 @@ interface AddressFormProps {
 
 interface AddressFormState {
     address: string
+    focused: boolean
 }
 
 export default class AddressForm extends React.Component<AddressFormProps, AddressFormState> {
 
     state = {
-        address: '7 Walmer Road, Toronto, ON, Canada'
+        address: '7 Walmer Road, Toronto, ON, Canada',
+        focused: false
     }
 
     render() {
+        const classNames = {
+            root: styles.root,
+            input: styles.input
+        }
+        const hrClassName = this.state.focused ?
+            styles.underlineActive : styles.underline
         const inputProps = {
             value: this.state.address,
-            onChange: this.onChange
+            onBlur: this.onBlur,
+            onChange: this.onChange,
+            onFocus: this.onFocus
         }
 
         return (
             <form onSubmit={this.handleFormSubmit}>
-                <PlacesAutocomplete inputProps={inputProps}/>
+
+                <div className={styles.container}>
+                    <PlacesAutocomplete
+                        classNames={classNames}
+                        inputProps={inputProps}
+                    />
+                    <hr className={hrClassName} />
+                </div>
                 <RaisedButton
                     fullWidth={true}
                     label="Submit"
@@ -38,8 +57,16 @@ export default class AddressForm extends React.Component<AddressFormProps, Addre
         )
     }
 
+    onBlur = () => {
+        this.setState({focused: false})
+    }
+
     onChange = (address: string) => {
         this.setState({address})
+    }
+
+    onFocus = () => {
+        this.setState({focused: true})
     }
 
     handleFormSubmit = (event: FormEvent<HTMLFormElement>) => {
