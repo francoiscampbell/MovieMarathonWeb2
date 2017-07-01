@@ -1,6 +1,5 @@
 deploy/default.conf
-deploy/MovieMarathon/bundle.js
-deploy/MovieMarathon/bundle.js.map
+deploy/MovieMarathon/bundle*
 
 *.scss.d.ts
 
