@@ -12,6 +12,7 @@ interface AddressFormProps {
 }
 
 interface AddressFormState {
+    addressErrorText: string
     date: moment.Moment
     lat: number
     lng: number
@@ -21,9 +22,10 @@ interface AddressFormState {
 export default class AddressForm extends React.Component<AddressFormProps, AddressFormState> {
 
     state = {
+        addressErrorText: '',
         date: moment(),
-        lat: 0,
-        lng: 0,
+        lat: null,
+        lng: null,
         focused: false
     }
 
@@ -31,6 +33,7 @@ export default class AddressForm extends React.Component<AddressFormProps, Addre
         return (
             <form onSubmit={this.handleFormSubmit}>
                 <GooglePlaceAutocomplete
+                    errorText={this.state.addressErrorText}
                     hintText="Enter your address"
                     results={this.onLatLng}
                 />
@@ -56,14 +59,30 @@ export default class AddressForm extends React.Component<AddressFormProps, Addre
     }
 
     onLatLng = (lat, lng) => {
-        this.setState({lat, lng})
+        this.setState({
+            addressErrorText: '',
+            lat,
+            lng
+        })
     }
 
     handleFormSubmit = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault()
-        this.props.onSubmit(
-            this.state.lat,
-            this.state.lng,
-            this.state.date)
+        if (this.validateForm()) {
+            this.props.onSubmit(
+                this.state.lat,
+                this.state.lng,
+                this.state.date)
+        }
+    }
+
+    validateForm = () => {
+        if (this.state.lat === null || this.state.lng === null) {
+            this.setState({
+                addressErrorText: 'Please enter your address'
+            })
+            return false
+        }
+        return true
     }
 }
