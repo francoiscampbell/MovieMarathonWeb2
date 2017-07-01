@@ -1,3 +1,4 @@
+import * as Immutable from 'immutable'
 import * as React from "react"
 import {FormEvent} from "react"
 
@@ -21,13 +22,15 @@ interface AddressFormState {
 
 export default class AddressForm extends React.Component<AddressFormProps, AddressFormState> {
 
-    state = {
+    defaultState = Immutable.fromJS({
         addressErrorText: '',
         date: moment(),
         lat: null,
         lng: null,
         focused: false
-    }
+    })
+
+    state = this.defaultState.toJS()
 
     render() {
         return (
@@ -60,7 +63,7 @@ export default class AddressForm extends React.Component<AddressFormProps, Addre
 
     onLatLng = (lat, lng) => {
         this.setState({
-            addressErrorText: '',
+            addressErrorText: this.defaultState.get('addressErrorText'),
             lat,
             lng
         })
@@ -77,6 +80,9 @@ export default class AddressForm extends React.Component<AddressFormProps, Addre
     }
 
     validateForm = () => {
+        if (process.env.NODE_ENV !== 'production') {
+            return true
+        }
         if (this.state.lat === null || this.state.lng === null) {
             this.setState({
                 addressErrorText: 'Please enter your address'

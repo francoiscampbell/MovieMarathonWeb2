@@ -43,9 +43,15 @@ export default function SubmitCheckboxList({items, onSubmit}: SubmitCheckboxList
 
     return (
         <form onSubmit={handleFormSubmit}>
+            <RaisedButton
+                className={styles.submitbuttontop}
+                fullWidth={true}
+                label="Submit"
+                type="submit"
+            />
             {listItems}
             <RaisedButton
-                className={styles.submitbutton}
+                className={styles.submitbuttonbottom}
                 fullWidth={true}
                 label="Submit"
                 type="submit"
