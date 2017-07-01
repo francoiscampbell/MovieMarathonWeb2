@@ -19,13 +19,10 @@ interface SchedulesListState {
 }
 
 export default class SchedulesList extends React.PureComponent<SchedulesListProps, SchedulesListState> {
+
     state = {
         imageUrls: Immutable.Map<Movie, string>(),
         imageUrlsToFetch: this.props.schedules.size > 0 ? this.props.schedules.first().get('movies').size : 0
-    }
-
-    componentWillMount() {
-        this.fetchImageUrls()
     }
 
     render() {
