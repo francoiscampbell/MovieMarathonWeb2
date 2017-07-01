@@ -3,7 +3,7 @@ const webpack = require('webpack');
 
 module.exports = {
     entry: [
-        './src/AddressForm.tsx'
+        './src/index.tsx'
     ],
     output: {
         filename: 'bundle.js',
