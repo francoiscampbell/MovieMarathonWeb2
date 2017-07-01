@@ -34,6 +34,7 @@ export default class SchedulesList extends React.PureComponent<SchedulesListProp
                     hour: 'ha'
                 }
             },
+            groupOrder: 'id',
             orientation: 'both',
             showCurrentTime: false,
             showMajorLabels: true,
@@ -41,7 +42,7 @@ export default class SchedulesList extends React.PureComponent<SchedulesListProp
             tooltip: {
                 followMouse: true
             },
-            type: 'range',
+            type: 'background',
             verticalScroll: true,
             zoomKey: 'ctrlKey'
         }

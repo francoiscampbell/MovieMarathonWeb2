@@ -9,7 +9,7 @@
     "docker-cleanup": "TAG=fcampbell/moviemarathon-dev; IMAGE=$(docker ps -q -f ancestor=$TAG); docker stop $IMAGE && docker rm $IMAGE",
     "test": "test",
     "watch": "node node_modules/webpack/bin/webpack.js --watch",
-    "webpack": "node node_modules/webpack/bin/webpack.js"
+    "webpack": "node node_modules/webpack/bin/webpack.js --config webpack.prod.js"
   },
   "keywords": [
     "movie",
