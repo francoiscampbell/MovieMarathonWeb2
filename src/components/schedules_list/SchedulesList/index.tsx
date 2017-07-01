@@ -39,7 +39,8 @@ export default class SchedulesList extends React.PureComponent<SchedulesListProp
             showMajorLabels: true,
             stack: false,
             tooltip: {
-                followMouse: true
+                followMouse: true,
+                overflowMethod: 'cap'
             },
             type: 'range',
             verticalScroll: true,
