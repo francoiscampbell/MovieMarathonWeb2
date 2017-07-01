@@ -6,6 +6,8 @@ import * as humanizeDuration from "humanize-duration"
 import {Movie, Schedule} from "../../../data_model/Movie"
 import Timeline from "react-visjs-timeline"
 
+import * as styles from './scheduleslist.scss'
+
 
 interface SchedulesListProps {
     schedules: Immutable.List<Schedule>
@@ -42,7 +44,7 @@ export default class SchedulesList extends React.PureComponent<SchedulesListProp
             tooltip: {
                 followMouse: true
             },
-            type: 'background',
+            type: 'range',
             verticalScroll: true,
             zoomKey: 'ctrlKey'
         }
@@ -59,11 +61,11 @@ export default class SchedulesList extends React.PureComponent<SchedulesListProp
                 const theatre = schedule.getIn(['theatre', 'name'])
                 const tooltip = `
                     <div>
-                        <div><h3>${title}</h3></div>
-                        <div><h4>${theatre}</h4></div>
-                        <div>Start time: ${startTime.format('dddd MMMM D YYYY, h:mm a')}</div> 
-                        <div>Run time: ${humanizeDuration(runTime)}</div> 
-                        <div>End time: ${endTime.format('dddd MMMM D YYYY, h:mm a')}</div> 
+                        <div class="${styles.tooltip_line}"><h3>${title}</h3></div>
+                        <div class="${styles.tooltip_line}"><h4>${theatre}</h4></div>
+                        <div class="${styles.tooltip_line}">Start time: ${startTime.format('dddd MMMM D YYYY, h:mm a')}</div> 
+                        <div class="${styles.tooltip_line}">Run time: ${humanizeDuration(runTime)}</div> 
+                        <div class="${styles.tooltip_line}">End time: ${endTime.format('dddd MMMM D YYYY, h:mm a')}</div> 
                         ${delayHtml}
                     </div>
                 `
@@ -79,8 +81,7 @@ export default class SchedulesList extends React.PureComponent<SchedulesListProp
 
         const groups = this.props.schedules.map((schedule, index) => {
             return {
-                id: index + 1,
-                content: schedule.getIn(['theatre', 'name'])
+                id: index + 1
             }
         }).toJS()
 
@@ -93,16 +94,10 @@ export default class SchedulesList extends React.PureComponent<SchedulesListProp
                 items={items.toJS()}
                 options={visOptions}
             />) : null
-        const attribution = hasSchedules ? (
-            <span>
-                 Movie posters from <a href="https://www.themoviedb.org">TMDb</a>
-             </span>
-        ) : null
         return (
             <div>
                 <h1>Generated {this.props.schedules.size} schedules{colon}</h1>
                 {timeline}
-                {attribution}
             </div>
         )
     }
