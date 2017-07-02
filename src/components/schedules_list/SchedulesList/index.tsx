@@ -81,7 +81,8 @@ export default class SchedulesList extends React.PureComponent<SchedulesListProp
 
         const groups = this.props.schedules.map((schedule, index) => {
             return {
-                id: index + 1
+                id: index + 1,
+                content: ''
             }
         }).toJS()
 
