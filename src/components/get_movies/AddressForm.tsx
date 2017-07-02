@@ -51,6 +51,7 @@ export default class AddressForm extends React.Component<AddressFormProps, Addre
                 <RaisedButton
                     fullWidth={true}
                     label="Submit"
+                    primary={true}
                     type="submit"
                 />
             </form>

@@ -47,6 +47,7 @@ export default function SubmitCheckboxList({items, onSubmit}: SubmitCheckboxList
                 className={styles.submitbuttontop}
                 fullWidth={true}
                 label="Submit"
+                primary={true}
                 type="submit"
             />
             {listItems}
@@ -54,6 +55,7 @@ export default function SubmitCheckboxList({items, onSubmit}: SubmitCheckboxList
                 className={styles.submitbuttonbottom}
                 fullWidth={true}
                 label="Submit"
+                primary={true}
                 type="submit"
             />
         </form>

@@ -1,9 +1,10 @@
 import * as Immutable from "immutable"
 import * as React from "react"
-
 import axios from "axios"
 import * as humanizeDuration from "humanize-duration"
+
 import {Movie, Schedule} from "../../../data_model/Movie"
+import Raisedbutton from 'material-ui/RaisedButton'
 import Timeline from "react-visjs-timeline"
 
 import * as styles from './scheduleslist.scss'
@@ -14,15 +15,13 @@ interface SchedulesListProps {
 }
 
 interface SchedulesListState {
-    imageUrls: Immutable.Map<Movie, string>,
-    imageUrlsToFetch: number
+    schedulesToShow: Immutable.List<Schedule>
 }
 
 export default class SchedulesList extends React.PureComponent<SchedulesListProps, SchedulesListState> {
 
     state = {
-        imageUrls: Immutable.Map<Movie, string>(),
-        imageUrlsToFetch: this.props.schedules.size > 0 ? this.props.schedules.first().get('movies').size : 0
+        schedulesToShow: this.props.schedules.take(10).toList()
     }
 
     render() {
@@ -47,7 +46,41 @@ export default class SchedulesList extends React.PureComponent<SchedulesListProp
             zoomKey: 'ctrlKey'
         }
 
-        const items = this.props.schedules.flatMap((schedule, scheduleIndex) => {
+        const items = this.getItems()
+        const groups = this.getGroups()
+
+
+        const hasSchedules = this.props.schedules.size > 0
+        const headerText = hasSchedules ?
+            `Showing ${this.state.schedulesToShow.size} of ${this.props.schedules.size} schedules:` :
+            `Could not find any schedules for that combination of movies`
+        const timeline = hasSchedules ? (
+            <Timeline
+                groups={groups}
+                items={items.toJS()}
+                options={visOptions}
+            />) : null
+        const hasMoreSchedules = this.props.schedules.size > this.state.schedulesToShow.size
+        const showMoreButton = hasMoreSchedules ? (
+            <Raisedbutton
+                className={styles.buttonbottom}
+                fullWidth={true}
+                label="Show More"
+                onClick={this.onShowMore}
+                primary={true}
+            />
+        ) : null
+        return (
+            <div>
+                <h1>{headerText}</h1>
+                {timeline}
+                {showMoreButton}
+            </div>
+        )
+    }
+
+    private getItems() {
+        return this.state.schedulesToShow.flatMap((schedule, scheduleIndex) => {
             return schedule.get('movies').map((movie, movieIndex) => {
                 const startTime = movie.get('showtime')
                 const runTime = movie.get('runTime')
@@ -78,60 +111,20 @@ export default class SchedulesList extends React.PureComponent<SchedulesListProp
                 }
             })
         })
+    }
 
-        const groups = this.props.schedules.map((schedule, index) => {
+    private getGroups() {
+        return this.state.schedulesToShow.map((schedule, index) => {
             return {
                 id: index + 1,
                 content: ''
             }
         }).toJS()
-
-
-        const hasSchedules = this.props.schedules.size > 0
-        const colon = hasSchedules ? ':' : ''
-        const timeline = hasSchedules ? (
-            <Timeline
-                groups={groups}
-                items={items.toJS()}
-                options={visOptions}
-            />) : null
-        return (
-            <div>
-                <h1>Generated {this.props.schedules.size} schedules{colon}</h1>
-                {timeline}
-            </div>
-        )
     }
 
-    fetchImageUrls() {
-        if (this.state.imageUrlsToFetch === 0) {
-            return
-        }
-
-        this.props.schedules
-            .first()
-            .get('movies')
-            .forEach(movie => {
-                const config = {
-                    params: {
-                        query: movie.get('title'),
-                        language: movie.get('titleLang'),
-                        year: movie.get('releaseYear'),
-                    }
-                }
-                axios.get('/tmdb/3/search/movie', config)
-                    .then(resp => {
-                        if (resp.data.results[0]) {
-                            const imageUrl = `/tmdbimg/t/p/w154/${resp.data.results[0].poster_path}`
-                            this.setState({
-                                imageUrls: this.state.imageUrls.set(movie, imageUrl)
-                            })
-                        }
-                        this.setState({
-                            imageUrlsToFetch: this.state.imageUrlsToFetch - 1
-                        })
-                    })
-                    .catch(console.dir)
-            })
+    onShowMore = () => {
+        const newNumSchedulesToShow = this.state.schedulesToShow.size + 10
+        const schedulesToShow = this.props.schedules.take(newNumSchedulesToShow).toList()
+        this.setState({schedulesToShow})
     }
 }
