@@ -53,7 +53,9 @@ export default class SchedulesList extends React.PureComponent<SchedulesListProp
                 const runTime = movie.get('runTime')
                 const endTime = startTime.clone().add(runTime)
                 const delay = schedule.getIn(['delays', movieIndex])
-                const delayHtml = delay ? `<div>Delay until next movie: ${humanizeDuration(delay)}</div>` : ''
+                const delayHtml = delay ?
+                    `<div class="${styles.tooltip_line}">Delay until next movie: ${humanizeDuration(delay)}</div>` :
+                    ''
 
                 const title = movie.get('title')
                 const theatre = schedule.getIn(['theatre', 'name'])
