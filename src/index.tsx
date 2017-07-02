@@ -9,7 +9,10 @@ import MuiThemeProvider from "material-ui/styles/MuiThemeProvider"
 
 injectTapEventPlugin()
 
-console.log(process.env.NODE_ENV)
+if (process.env.NODE_ENV !== 'production') {
+    console.log('dev')
+}
+
 ReactDOM.render(
     <MuiThemeProvider>
         <Index/>

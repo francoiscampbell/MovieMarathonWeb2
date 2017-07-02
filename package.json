@@ -4,11 +4,9 @@
   "description": "Movie Marathon React Frontend",
   "main": "index.js",
   "scripts": {
-    "deploy": "yarn run webpack && yarn run docker-prod",
-    "docker-dev": "TAG=fcampbell/moviemarathon-dev; docker build -t $TAG -f ./deploy/Dockerfile-dev ./deploy && docker run -p 8080:80 -v $(pwd)/deploy/MovieMarathon:/usr/share/nginx/MovieMarathon -d $TAG",
-    "docker-prod": "TAG=gcr.io/moviemarathon-1495982743507/moviemarathon; docker build -t $TAG -f ./deploy/Dockerfile-prod ./deploy && gcloud docker -- push $TAG",
-    "docker-cleanup": "TAG=fcampbell/moviemarathon-dev; docker rm $(docker stop $(docker ps -q -f ancestor=$TAG))",
-    "test": "test",
+    "deploy": "./deploy/deploy.sh",
+    "dev-server-start": "TAG=fcampbell/moviemarathon-dev; docker build -t $TAG -f ./deploy/Dockerfile-dev ./deploy && docker run -p 8080:80 -v $(pwd)/deploy/MovieMarathon:/usr/share/nginx/MovieMarathon -d $TAG",
+    "dev-server-stop": "TAG=fcampbell/moviemarathon-dev; docker rm $(docker stop $(docker ps -q -f ancestor=$TAG))",
     "watch": "node node_modules/webpack/bin/webpack.js --watch",
     "webpack": "node node_modules/webpack/bin/webpack.js --config webpack.prod.js"
   },
