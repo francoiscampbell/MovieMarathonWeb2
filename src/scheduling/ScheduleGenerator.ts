@@ -85,13 +85,16 @@ function generateSchedule(theatre: Theatre,
         }
         return
     }
-    availableMovies.forEach(movie => {
-        let showtime
-        let nextAvailableStartTime = startTime
-        while ((showtime = findNextShowtimeForMovie(movie, nextAvailableStartTime)) != null) {
+    availableMovies.forEach((movie, movieIndex) => {
+        let showtime = startTime
+        while ((showtime = findNextShowtimeForMovie(movie, showtime)) != null) {
             currentPermutation.push(movie.delete('showtimes').set('showtime', showtime))
-            nextAvailableStartTime = showtime.clone().add(movie.get('runTime'))
-            generateSchedule(theatre, availableMovies.shift(), nextAvailableStartTime, possibleSchedules, currentPermutation)
+            generateSchedule(
+                theatre,
+                availableMovies.delete(movieIndex),
+                showtime.clone().add(movie.get('runTime')),
+                possibleSchedules,
+                currentPermutation)
             currentPermutation.pop()
         }
     })
