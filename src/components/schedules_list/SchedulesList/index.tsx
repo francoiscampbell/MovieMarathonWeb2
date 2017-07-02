@@ -25,7 +25,38 @@ export default class SchedulesList extends React.PureComponent<SchedulesListProp
     }
 
     render() {
-        const visOptions = {
+        const hasSchedules = this.props.schedules.size > 0
+        const headerText = hasSchedules ?
+            `Showing ${this.state.schedulesToShow.size} of ${this.props.schedules.size} schedules:` :
+            `Could not find any schedules for that combination of movies`
+        const timeline = hasSchedules ? (
+            <Timeline
+                groups={this.getGroups()}
+                items={this.getItems()}
+                options={this.getOptions()}
+            />) : null
+        const hasMoreSchedules = this.props.schedules.size > this.state.schedulesToShow.size
+        const showMoreButton = hasMoreSchedules ? (
+            <Raisedbutton
+                className={styles.buttonbottom}
+                fullWidth={true}
+                label="Show More"
+                onClick={this.onShowMore}
+                primary={true}
+            />
+        ) : null
+
+        return (
+            <div>
+                <h1>{headerText}</h1>
+                {timeline}
+                {showMoreButton}
+            </div>
+        )
+    }
+
+    private getOptions() {
+        return {
             format: {
                 minorLabels: {
                     minute: 'h:mma',
@@ -45,38 +76,6 @@ export default class SchedulesList extends React.PureComponent<SchedulesListProp
             verticalScroll: true,
             zoomKey: 'ctrlKey'
         }
-
-        const items = this.getItems()
-        const groups = this.getGroups()
-
-
-        const hasSchedules = this.props.schedules.size > 0
-        const headerText = hasSchedules ?
-            `Showing ${this.state.schedulesToShow.size} of ${this.props.schedules.size} schedules:` :
-            `Could not find any schedules for that combination of movies`
-        const timeline = hasSchedules ? (
-            <Timeline
-                groups={groups}
-                items={items.toJS()}
-                options={visOptions}
-            />) : null
-        const hasMoreSchedules = this.props.schedules.size > this.state.schedulesToShow.size
-        const showMoreButton = hasMoreSchedules ? (
-            <Raisedbutton
-                className={styles.buttonbottom}
-                fullWidth={true}
-                label="Show More"
-                onClick={this.onShowMore}
-                primary={true}
-            />
-        ) : null
-        return (
-            <div>
-                <h1>{headerText}</h1>
-                {timeline}
-                {showMoreButton}
-            </div>
-        )
     }
 
     private getItems() {
@@ -110,7 +109,7 @@ export default class SchedulesList extends React.PureComponent<SchedulesListProp
                     title: tooltip
                 }
             })
-        })
+        }).toJS()
     }
 
     private getGroups() {
