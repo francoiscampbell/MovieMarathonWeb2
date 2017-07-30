@@ -14,10 +14,11 @@ export function generateSchedules(movies: Immutable.List<Movie>): Immutable.List
 
     const possibleSchedules = Immutable.List<Schedule>().withMutations(possibleSchedules => {
         availableTheatres.forEach(theatre => {
+            const startTime = process.env.NODE_ENV !== 'production' ? moment(0): moment()
             generateSchedule(
                 theatre,
-                processedMovies,
-                moment().subtract(1, 'months'),
+                theatre.get('movies'),
+                startTime,
                 possibleSchedules,
                 Immutable.List<Movie>().asMutable()
             )
