@@ -2,12 +2,16 @@ import * as Immutable from "immutable"
 import * as React from "react"
 import {FormEvent} from "react"
 import * as humanizeDuration from "humanize-duration"
-import * as moment from "moment"
-import * as uuid from "uuid"
+
 
 import {Schedule} from "../../../data_model/Movie"
 import Raisedbutton from "material-ui/RaisedButton"
 import Timeline from "react-visjs-timeline"
+
+import {
+    makeCalendar,
+    saveCalendar
+} from '../../../scheduling/ScheduleExporter'
 
 import * as styles from "./scheduleslist.scss"
 
@@ -149,47 +153,10 @@ export default class SchedulesList extends React.PureComponent<SchedulesListProp
         const selectedIndex = Immutable.List<HTMLInputElement>(event.currentTarget.elements)
             .findIndex(e => e.checked)
         const schedule = this.state.schedulesToShow.get(selectedIndex)
-        const theatreName = schedule.getIn(['theatre', 'name'])
-        const movies = schedule.get('movies').toList()
 
-        const calendar = SchedulesList.makeIcs(movies, theatreName)
+
+        const calendar = makeCalendar(schedule)
         console.log(calendar)
-    }
-
-    static ICAL_DT_FORMAT = 'YYYYMMDDTHHmm00'
-
-    private static makeIcs(movies, theatreName) {
-        const events = movies.map(m => {
-            const title = m.get('title')
-            const startTime = m.get('showtime')
-            const endTime = startTime.clone().add(m.get('runTime'))
-            return SchedulesList.makeEvent(title, startTime, endTime, theatreName)
-        }).join('\n')
-        const calendar = [
-            'BEGIN:VCALENDAR',
-            'VERSION:2.0',
-            'CALSCALE:GREGORIAN',
-            'PRODID:-//Francois Campbell//moviemarathon.ca',
-            events,
-            'END:VCALENDAR'
-        ]
-        return Immutable.List<string>(calendar).join('\n')
-    }
-
-    private static makeEvent(title, startTime, endTime, theatreName) {
-        const startTimeUtc = moment.utc(startTime)
-        const endTimeUtc = moment.utc(endTime)
-        //noinspection TypeScriptUnresolvedFunction
-        const eventData = [
-            `BEGIN:VEVENT`,
-            `UID:${uuid.v1()}`,
-            `DTSTAMP:${moment.utc().format(SchedulesList.ICAL_DT_FORMAT)}Z`,
-            `DTSTART:${startTimeUtc.format(SchedulesList.ICAL_DT_FORMAT)}Z`,
-            `DTEND:${endTimeUtc.format(SchedulesList.ICAL_DT_FORMAT)}Z`,
-            `SUMMARY:${title}`,
-            `LOCATION:${theatreName}`,
-            `END:VEVENT`,
-        ]
-        return Immutable.List<string>(eventData).join('\n')
+        saveCalendar(calendar)
     }
 }
