@@ -1,7 +1,6 @@
 import * as React from "react"
 import CircularProgress from "material-ui/CircularProgress"
 
-declare module './loading.scss'
 import * as styles from './loading.scss'
 
 interface LoadingProps {

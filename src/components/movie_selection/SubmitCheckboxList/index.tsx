@@ -7,7 +7,6 @@ import Checkbox from "material-ui/Checkbox"
 import {ListItem} from "material-ui/List"
 import RaisedButton from "material-ui/RaisedButton"
 
-declare module './submitcheckboxlist.scss'
 import * as styles from './submitcheckboxlist.scss'
 
 interface SubmitCheckboxListProps {
