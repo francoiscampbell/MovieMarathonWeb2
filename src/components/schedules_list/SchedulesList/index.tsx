@@ -36,7 +36,8 @@ export default class SchedulesList extends React.PureComponent<SchedulesListProp
                 groups={this.getGroups()}
                 items={this.getItems()}
                 options={this.getOptions()}
-            />) : null
+            />
+        ) : null
         const hasMoreSchedules = this.props.schedules.size > this.state.schedulesToShow.size
         const showMoreButton = hasMoreSchedules ? (
             <Raisedbutton
