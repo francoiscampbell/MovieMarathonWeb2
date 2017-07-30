@@ -13,7 +13,8 @@ import {
     saveCalendar
 } from '../../../scheduling/ScheduleExporter'
 
-import * as styles from "./scheduleslist.scss"
+declare module './scheduleslist.scss'
+import * as styles from './scheduleslist.scss'
 
 
 interface SchedulesListProps {

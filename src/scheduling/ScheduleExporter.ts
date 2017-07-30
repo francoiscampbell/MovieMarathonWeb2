@@ -9,7 +9,7 @@ const ICAL_DT_FORMAT = 'YYYYMMDDTHHmm00'
 
 export function makeCalendar(schedule: Schedule) {
     const theatreName = schedule.getIn(['theatre', 'name'])
-    const movies = schedule.get('movies').toList()
+    const movies = schedule.get('movies')
 
     const events = movies.map(m => {
         const title = m.get('title')
