@@ -47,10 +47,7 @@ jobs:
 
 workflows:
   version: 2
-  dev:
-    jobs:
-      - build_and_test
-  prod:
+  build:
     jobs:
       - build_and_test
       - deploy:
