@@ -1,26 +1,22 @@
-import * as Immutable from 'immutable'
-import * as React from "react"
-import {FormEvent} from "react"
+import Immutable from 'immutable'
+import PropTypes from 'prop-types'
+import React from 'react'
 
-import DatePicker from "material-ui/DatePicker"
-import * as moment from "moment"
-//noinspection TypeScriptCheckImport
-import RaisedButton from "material-ui/RaisedButton"
+import DatePicker from 'material-ui/DatePicker'
+import moment from 'moment'
+import RaisedButton from 'material-ui/RaisedButton'
 import GooglePlaceAutocomplete from 'material-ui-autocomplete-google-places'
 
-interface AddressFormProps {
-    onSubmit: (lat: number, lng: number, date: moment.Moment) => void
-}
 
-interface AddressFormState {
-    addressErrorText: string
-    date: moment.Moment
-    lat: number
-    lng: number
-    focused: boolean
-}
+export default class AddressForm extends React.Component {
 
-export default class AddressForm extends React.Component<AddressFormProps, AddressFormState> {
+    static propTypes = {
+        onSubmit: PropTypes.func
+    }
+
+    static defaultProps = {
+        onSubmit: () => {}
+    }
 
     defaultState = Immutable.fromJS({
         addressErrorText: '',
@@ -58,7 +54,7 @@ export default class AddressForm extends React.Component<AddressFormProps, Addre
         )
     }
 
-    onDateSelected = (_, date: any) => {
+    onDateSelected = (_, date) => {
         this.setState({date: moment(date)})
     }
 
@@ -70,7 +66,7 @@ export default class AddressForm extends React.Component<AddressFormProps, Addre
         })
     }
 
-    handleFormSubmit = (event: FormEvent<HTMLFormElement>) => {
+    handleFormSubmit = (event) => {
         event.preventDefault()
         if (this.validateForm()) {
             this.props.onSubmit(

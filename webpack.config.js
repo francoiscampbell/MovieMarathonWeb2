@@ -1,9 +1,9 @@
-const path = require('path');
-const webpack = require('webpack');
+const path = require('path')
+const webpack = require('webpack')
 
 module.exports = {
     entry: [
-        './src/index.tsx'
+        './src/index.js'
     ],
     output: {
         filename: 'bundle.js',
@@ -20,33 +20,13 @@ module.exports = {
 
     module: {
         rules: [{
-            // All files with a '.ts' or '.tsx' extension will be handled by 'awesome-typescript-loader'.
-            test: /\.tsx?$/,
-            loader: 'awesome-typescript-loader'
-        }, {
-            // All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.
-            enforce: 'pre',
             test: /\.js$/,
-            loader: 'source-map-loader'
+            exclude: /node_modules/,
+            loader: 'babel-loader'
         }, {
             test: /\.scss$/,
-            use: [{
-                loader: 'style-loader'
-            }, {
-                loader: 'typings-for-css-modules-loader',
-                options: {
-                    camelCase: true,
-                    modules: true,
-                    namedExport: true,
-                    sourceMap: true
-                }
-            }, {
-                loader: 'sass-loader',
-                options: {
-                    sourceMap: true
-                }
-            }]
-        },{
+            loader: 'style-loader!css-loader?sourceMap&modules&camelCase!sass-loader?sourceMap'
+        }, {
             test: /\.css$/,
             loader: "style-loader!css-loader?importLoaders=1"
         }, {
@@ -58,4 +38,4 @@ module.exports = {
     node: {
         fs: "empty"
     }
-};
+}

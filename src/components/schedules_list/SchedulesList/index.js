@@ -1,30 +1,20 @@
-import * as Immutable from "immutable"
-import * as React from "react"
-import {FormEvent} from "react"
-import * as humanizeDuration from "humanize-duration"
+import PropTypes from 'prop-types'
+import React from 'react'
+import Immutable from 'immutable'
+import humanizeDuration from 'humanize-duration'
+import Raisedbutton from 'material-ui/RaisedButton'
+import Timeline from 'react-visjs-timeline'
+
+import {makeCalendar, saveCalendar} from '../../../scheduling/ScheduleExporter'
+
+import styles from './scheduleslist.scss'
 
 
-import {Schedule} from "../../../data_model/Movie"
-import Raisedbutton from "material-ui/RaisedButton"
-import Timeline from "react-visjs-timeline"
+export default class SchedulesList extends React.PureComponent {
 
-import {
-    makeCalendar,
-    saveCalendar
-} from '../../../scheduling/ScheduleExporter'
-
-import * as styles from './scheduleslist.scss'
-
-
-interface SchedulesListProps {
-    schedules: Immutable.List<Schedule>
-}
-
-interface SchedulesListState {
-    schedulesToShow: Immutable.List<Schedule>
-}
-
-export default class SchedulesList extends React.PureComponent<SchedulesListProps, SchedulesListState> {
+    static propTypes = {
+        schedules: PropTypes.instanceOf(Immutable.List)
+    }
 
     state = {
         schedulesToShow: this.props.schedules.take(10).toList()
@@ -74,7 +64,7 @@ export default class SchedulesList extends React.PureComponent<SchedulesListProp
         )
     }
 
-    private getOptions() {
+    getOptions() {
         return {
             format: {
                 minorLabels: {
@@ -97,7 +87,7 @@ export default class SchedulesList extends React.PureComponent<SchedulesListProp
         }
     }
 
-    private getItems() {
+    getItems() {
         return this.state.schedulesToShow.flatMap((schedule, scheduleIndex) => {
             return schedule.get('movies').map((movie, movieIndex) => {
                 const startTime = movie.get('showtime')
@@ -131,7 +121,7 @@ export default class SchedulesList extends React.PureComponent<SchedulesListProp
         }).toJS()
     }
 
-    private getGroups() {
+    getGroups() {
         return this.state.schedulesToShow.map((schedule, index) => {
             const id = index + 1
             return {
@@ -147,10 +137,10 @@ export default class SchedulesList extends React.PureComponent<SchedulesListProp
         this.setState({schedulesToShow})
     }
 
-    exportSchedule = (event: FormEvent<HTMLFormElement>) => {
+    exportSchedule = (event) => {
         event.preventDefault()
 
-        const selectedIndex = Immutable.List<HTMLInputElement>(event.currentTarget.elements)
+        const selectedIndex = Immutable.List(event.currentTarget.elements)
             .findIndex(e => e.checked)
         const schedule = this.state.schedulesToShow.get(selectedIndex)
 

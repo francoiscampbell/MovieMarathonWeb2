@@ -1,11 +1,11 @@
-import * as React from "react"
-import * as ReactDOM from "react-dom"
+import React from 'react'
+import ReactDOM from 'react-dom'
 
-import * as injectTapEventPlugin from "react-tap-event-plugin"
+import injectTapEventPlugin from 'react-tap-event-plugin'
 
-import Index from "./components/Index"
+import Index from './components/Index'
 //noinspection TypeScriptCheckImport
-import MuiThemeProvider from "material-ui/styles/MuiThemeProvider"
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 
 injectTapEventPlugin()
 

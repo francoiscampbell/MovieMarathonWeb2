@@ -1,21 +1,12 @@
-import * as Immutable from "immutable"
-import * as React from "react"
-import Card from "material-ui/Card"
+import React from 'react'
+import Card from 'material-ui/Card'
 
-import GetMovies from "./get_movies/GetMovies"
-import Loading from "./Loading"
-import MovieSelection from "./movie_selection/MovieSelection"
-import SchedulesList from "./schedules_list/SchedulesList"
-import {Movie, Schedule} from "../data_model/Movie"
+import GetMovies from './get_movies/GetMovies'
+import Loading from './Loading'
+import MovieSelection from './movie_selection/MovieSelection'
+import SchedulesList from './schedules_list/SchedulesList'
 
-
-interface IndexState {
-    isLoading: boolean
-    movies: Immutable.List<Movie>,
-    schedules: Immutable.List<Schedule>
-}
-
-export default class Index extends React.Component<undefined, IndexState> {
+export default class Index extends React.Component {
 
     state = {
         isLoading: false,
@@ -43,10 +34,10 @@ export default class Index extends React.Component<undefined, IndexState> {
         const {isLoading, movies, schedules} = this.state
 
         if (isLoading) {
-            return Index.loading()
+            return this.loading()
         }
         if (schedules) {
-            return Index.schedulesList(schedules)
+            return this.schedulesList(schedules)
         }
         if (movies) {
             return this.moviesList(movies)
@@ -55,12 +46,12 @@ export default class Index extends React.Component<undefined, IndexState> {
     }
 
 
-    private static loading(): JSX.Element {
+    loading() {
         return <Loading text="Loading"/>
     }
 
 
-    private getMovies(): JSX.Element {
+    getMovies() {
         return <GetMovies
             onLoading={() => this.setState({isLoading: true})}
             onMovies={movies =>
@@ -72,7 +63,7 @@ export default class Index extends React.Component<undefined, IndexState> {
         />
     }
 
-    private moviesList(movies: Immutable.List<Movie>): JSX.Element {
+    moviesList(movies) {
         return <MovieSelection
             movies={movies}
             onLoading={() => this.setState({isLoading: true})}
@@ -80,7 +71,7 @@ export default class Index extends React.Component<undefined, IndexState> {
         />
     }
 
-    private static schedulesList(schedules: Immutable.List<Schedule>): JSX.Element {
+    schedulesList(schedules) {
         return <SchedulesList schedules={schedules}/>
     }
 }

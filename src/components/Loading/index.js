@@ -1,13 +1,15 @@
-import * as React from "react"
+import PropTypes from 'prop-types'
+import React from 'react'
 import CircularProgress from "material-ui/CircularProgress"
 
-import * as styles from './loading.scss'
+import styles from './loading.scss'
 
-interface LoadingProps {
-    text: string
-}
+export default class Loading extends React.Component {
 
-export default class Loading extends React.Component<LoadingProps, any> {
+    static propTypes = {
+        text: PropTypes.string.isRequired
+    }
+
     render() {
         return (
             <div>

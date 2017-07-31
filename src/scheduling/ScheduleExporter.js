@@ -1,13 +1,11 @@
-import * as Immutable from "immutable"
-import * as FileSaver from 'file-saver'
-import * as moment from "moment"
-import * as uuid from "uuid"
-
-import {Schedule} from "../data_model/Movie"
+import Immutable from 'immutable'
+import FileSaver from 'file-saver'
+import moment from 'moment'
+import uuid from 'uuid'
 
 const ICAL_DT_FORMAT = 'YYYYMMDDTHHmm00'
 
-export function makeCalendar(schedule: Schedule) {
+export function makeCalendar(schedule) {
     const theatreName = schedule.getIn(['theatre', 'name'])
     const movies = schedule.get('movies')
 
@@ -25,7 +23,7 @@ export function makeCalendar(schedule: Schedule) {
         events,
         'END:VCALENDAR'
     ]
-    return Immutable.List<string>(calendar).join('\n')
+    return Immutable.List(calendar).join('\n')
 }
 
 function makeEvent(title, startTime, endTime, theatreName) {
@@ -42,11 +40,10 @@ function makeEvent(title, startTime, endTime, theatreName) {
         `LOCATION:${theatreName}`,
         `END:VEVENT`,
     ]
-    return Immutable.List<string>(eventData).join('\n')
+    return Immutable.List(eventData).join('\n')
 }
 
-export function saveCalendar(calendar: string) {
+export function saveCalendar(calendar) {
     const blob = new Blob([calendar], {type: 'text/calendar', endings: 'native'})
-    //noinspection TypeScriptUnresolvedFunction
     FileSaver.saveAs(blob, 'moviemarathon.ics')
 }
