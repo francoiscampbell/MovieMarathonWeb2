@@ -1,5 +1,5 @@
-import Immutable from "immutable"
-import moment from "moment"
+import Immutable from 'immutable'
+import moment from 'moment'
 
 
 export function generateSchedules(movies) {
@@ -85,7 +85,7 @@ function generateSchedule(theatre,
     }
     availableMovies.forEach((movie, movieIndex) => {
         let showtime = startTime
-        while ((showtime = findNextShowtimeForMovie(movie, showtime)) !== null) {
+        while ((showtime = findNextShowtimeForMovie(movie, showtime)) !== undefined) {
             currentPermutation.push(movie.delete('showtimes').set('showtime', showtime))
             generateSchedule(
                 theatre,
