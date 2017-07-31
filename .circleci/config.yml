@@ -29,6 +29,10 @@ jobs:
 
     working_directory: ~/repo
 
+    branches:
+      only:
+        - master
+
     steps:
       - checkout
 
@@ -44,16 +48,4 @@ jobs:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
-
-workflows:
-  version: 2
-  build:
-    jobs:
-      - build_and_test
-      - deploy:
-          requires:
-            - build_and_test
-          filters:
-            branches:
-              only: master
 
