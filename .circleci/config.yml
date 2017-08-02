@@ -4,8 +4,6 @@ jobs:
     docker:
       - image: circleci/node:8.1.2
 
-    working_directory: ~/repo
-
     steps:
       - checkout
 
@@ -37,8 +35,6 @@ jobs:
   deploy:
     docker:
       - image: google/cloud-sdk
-
-    working_directory: /tmp/deploy
 
     steps:
       - attach_workspace:
