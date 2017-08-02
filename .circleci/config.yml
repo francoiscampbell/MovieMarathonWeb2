@@ -41,6 +41,7 @@ jobs:
           at: .
       - run: pwd
       - run: ls -la
+      - run: ls -la deploy
       - run: ./deploy/deploy_ci.sh
 
 workflows:
