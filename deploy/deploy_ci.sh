@@ -1,8 +1,10 @@
 #!/usr/bin/env bash -e
 
 TAG='gcr.io/moviemarathon-1495982743507/moviemarathon'
-yarn run build
+KEY_FILE=${HOME}/gcp-key.json
+echo ${GOOGLE_AUTH} | base64 -i --decode > ${KEY_FILE}
 docker build -t ${TAG} -f deploy/Dockerfile-prod deploy
+gcloud auth activate-service-account --key-file ${KEY_FILE}
 gcloud docker -- push ${TAG}
 ssh campbell.francois@moviemarathon.ca "
     /tmp/google-cloud-sdk/bin/gcloud docker -- pull $TAG:latest &&
