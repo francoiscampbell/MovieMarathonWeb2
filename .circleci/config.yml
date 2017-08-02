@@ -32,11 +32,11 @@ jobs:
     docker:
       - image: google/cloud-sdk
 
-    working_directory: ~/repo/deploy
+    working_directory: ~/repo
 
 #      - run: gcloud --quiet config set project ${GOOGLE_PROJECT_ID}
 #      - run: gcloud --quiet config set compute/zone ${GOOGLE_COMPUTE_ZONE}
-      - run: ./deploy_ci.sh
+      - run: ./deploy/deploy_ci.sh
 
 workflows:
   version: 2
