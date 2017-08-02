@@ -25,16 +25,24 @@ jobs:
           key: v1-dependencies-{{ checksum "package.json" }}
 
       - store_artifacts:
-          path: deploy/
-          destination: deploy
+          path: deploy/MovieMarathon
+          destination: build
+
+      - persist_to_workspace:
+          root: /tmp/workspace
+          paths:
+            - deploy/*
+
 
   deploy:
     docker:
       - image: google/cloud-sdk
 
-    working_directory: ~/repo/deploy
+    working_directory: /tmp/workspace/deploy
 
     steps:
+      - attach_workspace:
+          at: /tmp/workspace
       - run: pwd
       - run: ls -la
       - run: ./deploy_ci.sh
