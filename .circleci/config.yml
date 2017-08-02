@@ -39,13 +39,6 @@ jobs:
     steps:
       - attach_workspace:
           at: .
-      - run: pwd
-      - run: ls -la
-      - run: ls -la deploy
-      - run: chmod +x ./deploy/deploy_ci.sh
-      - run: ls -la deploy
-      - run: chown $(whoami) ./deploy/deploy_ci.sh
-      - run: ls -la deploy
       - run: ./deploy/deploy_ci.sh
 
 workflows:

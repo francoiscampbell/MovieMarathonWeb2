@@ -1,4 +1,4 @@
-#!/usr/bin/env bash -e
+#!/bin/bash -e
 
 TAG='gcr.io/moviemarathon-1495982743507/moviemarathon'
 KEY_FILE=${HOME}/gcp-key.json
