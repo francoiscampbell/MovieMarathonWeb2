@@ -29,7 +29,7 @@ jobs:
           destination: build
 
       - persist_to_workspace:
-          root: /tmp
+          root: .
           paths:
             - deploy/*
 
@@ -42,7 +42,7 @@ jobs:
 
     steps:
       - attach_workspace:
-          at: /tmp/workspace
+          at: .
       - run: pwd
       - run: ls -la
       - run: ./deploy_ci.sh
