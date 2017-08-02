@@ -38,6 +38,10 @@ jobs:
 #          fallback to using the latest cache if no exact match is found
           - v1-dependencies-
 
+      - run: echo ${GOOGLE_AUTH} | base64 -i --decode > ${HOME}/gcp-key.json
+      - run: gcloud auth activate-service-account --key-file ${HOME}/gcp-key.json
+#      - run: gcloud --quiet config set project ${GOOGLE_PROJECT_ID}
+#      - run: gcloud --quiet config set compute/zone ${GOOGLE_COMPUTE_ZONE}
       - run: yarn deploy
 
       - save_cache:
