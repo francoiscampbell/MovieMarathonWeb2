@@ -35,7 +35,9 @@ jobs:
     working_directory: ~/repo/deploy
 
     steps:
-      - run: ./deploy/deploy_ci.sh
+      - run: pwd
+      - run: ls -la
+      - run: ./deploy_ci.sh
 
 workflows:
   version: 2
