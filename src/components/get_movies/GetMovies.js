@@ -10,6 +10,7 @@ import Header from '../Header'
 export default class GetMovies extends React.PureComponent {
 
     static propTypes = {
+        onError: PropTypes.func.isRequired,
         onLoading: PropTypes.func.isRequired,
         onMovies: PropTypes.func.isRequired
     }
@@ -22,12 +23,13 @@ export default class GetMovies extends React.PureComponent {
                 startDate: date.format('YYYY-MM-DD')
             }
         }
-        const apiVersion = process.env.NODE_ENV === 'production' ?
-            'v1.1' : 'mock'
         this.props.onLoading()
-        axios.get(`//moviemarathon.ca/tms/${apiVersion}/movies/showings`, config)
+        const url = process.env.NODE_ENV === 'production' ?
+            '//moviemarathon.ca/tms/v1.1/movies/showings' :
+            '/tms/mock/movies/showings'
+        axios.get(url, config)
             .then(resp => this.props.onMovies(Immutable.fromJS(resp.data)))
-            .catch(error => console.log(error))
+            .catch(this.props.onError)
     }
 
     render() {

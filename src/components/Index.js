@@ -9,6 +9,7 @@ import SchedulesList from './schedules_list/SchedulesList'
 export default class Index extends React.Component {
 
     state = {
+        error: null,
         isLoading: false,
         movies: null,
         schedules: null
@@ -31,8 +32,11 @@ export default class Index extends React.Component {
     }
 
     getContent() {
-        const {isLoading, movies, schedules} = this.state
+        const {error, isLoading, movies, schedules} = this.state
 
+        if (error) {
+            return <div>{error.toString()}</div>
+        }
         if (isLoading) {
             return this.loading()
         }
@@ -53,6 +57,7 @@ export default class Index extends React.Component {
 
     getMovies() {
         return <GetMovies
+            onError={error => this.setState({error})}
             onLoading={() => this.setState({isLoading: true})}
             onMovies={movies =>
                 this.setState({

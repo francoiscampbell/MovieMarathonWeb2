@@ -6,7 +6,7 @@ module.exports = {
         './src/index.js'
     ],
     output: {
-        filename: 'bundle.js',
+        filename: 'bundle-dev.js',
         path: path.resolve('./deploy/MovieMarathon/')
     },
 
