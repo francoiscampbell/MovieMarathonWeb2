@@ -6,7 +6,7 @@
   "scripts": {
     "build": "node node_modules/webpack/bin/webpack.js --config webpack.prod.js",
     "deploy": "deploy/deploy.sh",
-    "dev-server-start": "TAG=fcampbell/moviemarathon-dev; docker build -t $TAG -f ./deploy/Dockerfile-dev ./deploy && docker run -p 8080:80 -v $(pwd)/deploy/MovieMarathon:/usr/share/nginx/MovieMarathon -d $TAG",
+    "dev-server-start": "TAG=fcampbell/moviemarathon-dev; docker build -t $TAG -f ./deploy/Dockerfile ./deploy && docker run -p 8080:80 -v $(pwd)/deploy/MovieMarathon:/usr/share/nginx/MovieMarathon -d $TAG",
     "dev-server-stop": "TAG=fcampbell/moviemarathon-dev; docker rm $(docker stop $(docker ps -q -f ancestor=$TAG))",
     "test": "true",
     "watch": "node node_modules/webpack/bin/webpack.js --watch"
