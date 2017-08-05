@@ -25,7 +25,7 @@ export default class GetMovies extends React.PureComponent {
         const apiVersion = process.env.NODE_ENV === 'production' ?
             'v1.1' : 'mock'
         this.props.onLoading()
-        axios.get(`/tms/${apiVersion}/movies/showings`, config)
+        axios.get(`//moviemarathon.ca/tms/${apiVersion}/movies/showings`, config)
             .then(resp => this.props.onMovies(Immutable.fromJS(resp.data)))
             .catch(error => console.log(error))
     }
