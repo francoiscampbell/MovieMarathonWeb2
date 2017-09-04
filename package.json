@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "node node_modules/.bin/webpack --config webpack.prod.js",
-    "deploy": "deploy/deploy.sh",
-    "dev-server": "node node_modules/.bin/webpack-dev-server",
+    "dev-server": "node node_modules/.bin/webpack-dev-server --content-base docs-dev/",
     "test": "true",
     "watch": "node node_modules/.bin/webpack --watch"
   },
