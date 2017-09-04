@@ -23,11 +23,11 @@ jobs:
           key: v1-dependencies-{{ checksum "package.json" }}
 
       - store_artifacts:
-          path: dist-dev
+          path: docs-dev
           destination: build
 
       - persist_to_workspace:
           root: .
           paths:
-            - dist-dev
+            - docs-dev
 

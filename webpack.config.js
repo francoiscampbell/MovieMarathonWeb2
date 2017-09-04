@@ -1,7 +1,7 @@
 const path = require('path')
 const webpack = require('webpack')
 
-const devContentBase = path.resolve('./dist-dev/')
+const devContentBase = path.resolve('./docs-dev/')
 module.exports = {
     entry: [
         './src/index.js'
