@@ -1,5 +1,4 @@
-deploy/default.conf
-deploy/MovieMarathon/bundle*
+dist-dev/
 
 *.scss.d.ts
 

@@ -4,12 +4,15 @@
   "description": "Movie Marathon React Frontend",
   "main": "index.js",
   "scripts": {
-    "build": "node node_modules/webpack/bin/webpack.js --config webpack.prod.js",
+    "build": "node node_modules/.bin/webpack --config webpack.prod.js",
     "deploy": "deploy/deploy.sh",
-    "dev-server-start": "TAG=fcampbell/moviemarathon-dev; docker build -t $TAG -f ./deploy/Dockerfile ./deploy && docker run -p 8080:80 -v $(pwd)/deploy/MovieMarathon:/usr/share/nginx/MovieMarathon -d $TAG",
-    "dev-server-stop": "TAG=fcampbell/moviemarathon-dev; docker rm $(docker stop $(docker ps -q -f ancestor=$TAG))",
+    "dev-server": "node node_modules/.bin/webpack-dev-server",
     "test": "true",
-    "watch": "node node_modules/webpack/bin/webpack.js --watch"
+    "watch": "node node_modules/.bin/webpack --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/francoiscampbell/MovieMarathon.git"
   },
   "keywords": [
     "movie",
@@ -48,6 +51,7 @@
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-react-jsx": "^6.24.1",
     "source-map-loader": "^0.2.1",
-    "webpack": "^2.6.1"
+    "webpack": "^2.6.1",
+    "webpack-dev-server": "^2.7.1"
   }
 }

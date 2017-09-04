@@ -1,13 +1,20 @@
 const path = require('path')
 const webpack = require('webpack')
 
+const devContentBase = path.resolve('./dist-dev/')
 module.exports = {
     entry: [
         './src/index.js'
     ],
     output: {
         filename: 'bundle-dev.js',
-        path: path.resolve('./deploy/MovieMarathon/')
+        path: devContentBase
+    },
+
+    devServer: {
+        contentBase: devContentBase,
+        compress: true,
+        port: 9000
     },
 
     // Enable sourcemaps for debugging webpack's output.
@@ -15,7 +22,7 @@ module.exports = {
 
     resolve: {
         // Add '.ts' and '.tsx' as resolvable extensions.
-        extensions: ['.tsx', '.ts', '.js', '.scss', '.json']
+        extensions: ['.js', '.scss', '.json']
     },
 
     module: {

@@ -25,8 +25,8 @@ export default class GetMovies extends React.PureComponent {
         }
         this.props.onLoading()
         const url = process.env.NODE_ENV === 'production' ?
-            '//moviemarathon.ca/tms/v1.1/movies/showings' :
-            '/tms/mock/movies/showings'
+            '//movie-marathon-api.herokuapp.com/v1.1/movies/showings' :
+            'http://localhost:3000/v1.1/movies/showings'
         axios.get(url, config)
             .then(resp => this.props.onMovies(Immutable.fromJS(resp.data)))
             .catch(this.props.onError)
