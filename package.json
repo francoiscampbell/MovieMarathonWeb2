@@ -4,10 +4,10 @@
   "description": "Movie Marathon React Frontend",
   "main": "index.js",
   "scripts": {
-    "build": "node node_modules/.bin/webpack --config webpack.prod.js",
-    "dev-server": "node node_modules/.bin/webpack-dev-server --content-base docs-dev/",
+    "build": "webpack --config webpack.prod.js",
+    "dev-server": "webpack-dev-server --content-base docs-dev/",
     "test": "true",
-    "watch": "node node_modules/.bin/webpack --watch"
+    "watch": "webpack --watch"
   },
   "repository": {
     "type": "git",
@@ -27,6 +27,7 @@
     "css-loader": "^0.28.4",
     "file-loader": "^0.11.2",
     "file-saver": "^1.3.3",
+    "history": "^4.7.2",
     "humanize-duration": "^3.10.0",
     "immutable": "^3.8.1",
     "material-ui": "^0.18.5",
@@ -37,6 +38,8 @@
     "react": "^15.6.1",
     "react-dom": "^15.5.4",
     "react-redux": "^5.0.6",
+    "react-router-dom": "^4.2.2",
+    "react-router-redux": "^5.0.0-alpha.6",
     "react-tap-event-plugin": "^2.0.1",
     "react-visjs-timeline": "^1.3.3",
     "redux": "^3.7.2",

@@ -1,14 +1,17 @@
+import {connect} from 'react-redux'
 import Immutable from 'immutable'
 import PropTypes from 'prop-types'
 import React from 'react'
 
-import {generateSchedules} from '../../scheduling/ScheduleGenerator'
-import SubmitCheckboxList from './SubmitCheckboxList'
+import {generateSchedules} from 'scheduling/ScheduleGenerator'
+import SubmitCheckboxList from 'components/movie_selection/SubmitCheckboxList'
+import {sortedMovies} from 'flux/ducks/movies'
 
 
-export default class MovieSelection extends React.PureComponent {
+export class UnconnectedMovieSelection extends React.PureComponent {
     static propTypes = {
         movies: PropTypes.instanceOf(Immutable.List),
+        isLoading: PropTypes.bool.isRequired,
         onLoading: PropTypes.func,
         onSchedules: PropTypes.func
     }
@@ -35,3 +38,11 @@ export default class MovieSelection extends React.PureComponent {
         )
     }
 }
+
+function mapStateToProps(state) {
+    return {
+        movies: sortedMovies(state)
+    }
+}
+
+export default connect(mapStateToProps)(UnconnectedMovieSelection)

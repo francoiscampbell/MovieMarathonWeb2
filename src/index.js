@@ -4,8 +4,8 @@ import {Provider} from 'react-redux'
 import React from 'react'
 import ReactDOM from 'react-dom'
 
-import Index from 'src/components/Index'
-import store from 'src/flux/store'
+import Index from 'components/Index'
+import store from 'flux/store'
 
 
 injectTapEventPlugin()

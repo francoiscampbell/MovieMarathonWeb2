@@ -53,7 +53,7 @@ export function fetchMovies(lat, lng, date) {
         const url = process.env.NODE_ENV === 'production' ?
             API_URL_PROD :
             API_URL_DEV
-        axios.get(url, config)
+        return axios.get(url, config)
             .then(resp => dispatch(fetchMoviesSuccess(resp.data)))
             .catch(() => dispatch(fetchMoviesError()))
     }
@@ -79,5 +79,5 @@ function fetchMoviesSuccess(movies) {
 }
 
 export function sortedMovies(state) {
-    return state.get('movies').sortBy(movie => movie.get('title')).toList()
+    return state.getIn(['movies', 'movies']).sortBy(movie => movie.get('title')).toList()
 }

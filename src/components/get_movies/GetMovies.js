@@ -1,11 +1,12 @@
 import {connect} from 'react-redux'
 import PropTypes from 'prop-types'
+import {push} from 'react-router-redux'
 import React from 'react'
 
-import AddressForm from 'src/components/get_movies/AddressForm'
-import {fetchMovies} from 'src/flux/ducks/movies'
-import Header from 'src/components/Header'
-import Loading from 'src/components/Loading'
+import AddressForm from 'components/get_movies/AddressForm'
+import {fetchMovies} from 'flux/ducks/movies'
+import Header from 'components/Header'
+import Loading from 'components/Loading'
 
 
 export class UnconnectedGetMovies extends React.PureComponent {
@@ -13,12 +14,13 @@ export class UnconnectedGetMovies extends React.PureComponent {
     static propTypes = {
         error: PropTypes.string.isRequired,
         fetchMovies: PropTypes.func.isRequired,
+        goToNextStep: PropTypes.func.isRequired,
         isLoading: PropTypes.bool.isRequired,
     }
 
     render() {
         if (this.props.error) {
-            return <div>{error.toString()}</div>
+            return <div>{this.props.error.toString()}</div>
         }
         if (this.props.isLoading) {
             return <Loading text="Loading movies"/>
@@ -30,22 +32,28 @@ export class UnconnectedGetMovies extends React.PureComponent {
                     titleText="Movie Marathon"
                 />
                 <AddressForm
-                    onSubmit={this.props.fetchMovies}
+                    onSubmit={this.onSubmit}
                 />
             </div>
         )
     }
-}
 
-function mapStateToProps(state) {
-    return {
-        error: state.get('error'),
-        isLoading: state.get('isLoading'),
+    onSubmit = (lat, lng, date) => {
+        this.props.fetchMovies(lat, lng, date).then(this.props.goToNextStep())
     }
 }
 
-mapDispatchToProps = {
-    fetchMovies
+function mapStateToProps(state) {
+    const movieState = state.get('movies')
+    return {
+        error: movieState.get('error'),
+        isLoading: movieState.get('isLoading'),
+    }
 }
 
-export default connect(mapStateToProps(), mapDispatchToProps)(UnconnectedGetMovies)
+const mapDispatchToProps = {
+    fetchMovies,
+    goToNextStep: () => push('/movies')
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(UnconnectedGetMovies)
