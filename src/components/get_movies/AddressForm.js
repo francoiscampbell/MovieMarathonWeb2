@@ -1,4 +1,3 @@
-import Immutable from 'immutable'
 import PropTypes from 'prop-types'
 import React from 'react'
 
@@ -11,22 +10,18 @@ import GooglePlaceAutocomplete from 'material-ui-autocomplete-google-places'
 export default class AddressForm extends React.Component {
 
     static propTypes = {
-        onSubmit: PropTypes.func
+        onSubmit: PropTypes.func.isRequired,
     }
 
-    static defaultProps = {
-        onSubmit: () => {}
-    }
-
-    defaultState = Immutable.fromJS({
+    defaultState = {
         addressErrorText: '',
         date: moment(),
         lat: null,
         lng: null,
         focused: false
-    })
+    }
 
-    state = this.defaultState.toJS()
+    state = this.defaultState
 
     render() {
         return (
@@ -60,7 +55,7 @@ export default class AddressForm extends React.Component {
 
     onLatLng = (lat, lng) => {
         this.setState({
-            addressErrorText: this.defaultState.get('addressErrorText'),
+            addressErrorText: this.defaultState.addressErrorText,
             lat,
             lng
         })

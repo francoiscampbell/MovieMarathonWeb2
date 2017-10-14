@@ -1,11 +1,12 @@
+import injectTapEventPlugin from 'react-tap-event-plugin'
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
+import {Provider} from 'react-redux'
 import React from 'react'
 import ReactDOM from 'react-dom'
 
-import injectTapEventPlugin from 'react-tap-event-plugin'
+import Index from 'src/components/Index'
+import store from 'src/flux/store'
 
-import Index from './components/Index'
-//noinspection TypeScriptCheckImport
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 
 injectTapEventPlugin()
 
@@ -14,8 +15,10 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 ReactDOM.render(
-    <MuiThemeProvider>
-        <Index/>
-    </MuiThemeProvider>,
+    <Provider store={store}>
+        <MuiThemeProvider>
+            <Index/>
+        </MuiThemeProvider>
+    </Provider>,
     document.getElementById('react-app')
 )

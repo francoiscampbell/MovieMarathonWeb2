@@ -1,12 +1,13 @@
-import React from 'react'
 import Card from 'material-ui/Card'
+import {connect} from 'react-redux'
+import React from 'react'
 
-import GetMovies from './get_movies/GetMovies'
-import Loading from './Loading'
-import MovieSelection from './movie_selection/MovieSelection'
-import SchedulesList from './schedules_list/SchedulesList'
+import GetMovies from 'src/components/get_movies/GetMovies'
+import MovieSelection from 'src/components/movie_selection/MovieSelection'
+import SchedulesList from 'src/components/schedules_list/SchedulesList'
+import {sortedMovies} from 'src/flux/ducks/movies'
 
-export default class Index extends React.Component {
+export class UnconnectedIndex extends React.Component {
 
     state = {
         error: null,
@@ -46,26 +47,12 @@ export default class Index extends React.Component {
         if (movies) {
             return this.moviesList(movies)
         }
-        return this.getMovies()
+        return <GetMovies/>
     }
 
 
     loading() {
         return <Loading text="Loading"/>
-    }
-
-
-    getMovies() {
-        return <GetMovies
-            onError={error => this.setState({error})}
-            onLoading={() => this.setState({isLoading: true})}
-            onMovies={movies =>
-                this.setState({
-                    movies: movies.sortBy(movie => movie.get('title')).toList(),
-                    isLoading: false
-                })
-            }
-        />
     }
 
     moviesList(movies) {
@@ -80,3 +67,11 @@ export default class Index extends React.Component {
         return <SchedulesList schedules={schedules}/>
     }
 }
+
+function mapStateToProps(state) {
+    return {
+        movies: sortedMovies(state)
+    }
+}
+
+export default connect(mapStateToProps)(UnconnectedIndex)

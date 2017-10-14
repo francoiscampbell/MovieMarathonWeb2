@@ -1,38 +1,28 @@
-import Immutable from 'immutable'
+import {connect} from 'react-redux'
 import PropTypes from 'prop-types'
 import React from 'react'
-import axios from 'axios'
 
-import AddressForm from './AddressForm'
-import Header from '../Header'
+import AddressForm from 'src/components/get_movies/AddressForm'
+import {fetchMovies} from 'src/flux/ducks/movies'
+import Header from 'src/components/Header'
+import Loading from 'src/components/Loading'
 
 
-export default class GetMovies extends React.PureComponent {
+export class UnconnectedGetMovies extends React.PureComponent {
 
     static propTypes = {
-        onError: PropTypes.func.isRequired,
-        onLoading: PropTypes.func.isRequired,
-        onMovies: PropTypes.func.isRequired
-    }
-
-    onSubmit = (lat, lng, date) => {
-        const config = {
-            params: {
-                lat,
-                lng,
-                startDate: date.format('YYYY-MM-DD')
-            }
-        }
-        this.props.onLoading()
-        const url = process.env.NODE_ENV === 'production' ?
-            'https://movie-marathon-api.herokuapp.com/v1.1/movies/showings' :
-            'http://localhost:3000/mock/movies/showings'
-        axios.get(url, config)
-            .then(resp => this.props.onMovies(Immutable.fromJS(resp.data)))
-            .catch(this.props.onError)
+        error: PropTypes.string.isRequired,
+        fetchMovies: PropTypes.func.isRequired,
+        isLoading: PropTypes.bool.isRequired,
     }
 
     render() {
+        if (this.props.error) {
+            return <div>{error.toString()}</div>
+        }
+        if (this.props.isLoading) {
+            return <Loading text="Loading movies"/>
+        }
         return (
             <div>
                 <Header
@@ -40,9 +30,22 @@ export default class GetMovies extends React.PureComponent {
                     titleText="Movie Marathon"
                 />
                 <AddressForm
-                    onSubmit={this.onSubmit}
+                    onSubmit={this.props.fetchMovies}
                 />
             </div>
         )
     }
 }
+
+function mapStateToProps(state) {
+    return {
+        error: state.get('error'),
+        isLoading: state.get('isLoading'),
+    }
+}
+
+mapDispatchToProps = {
+    fetchMovies
+}
+
+export default connect(mapStateToProps(), mapDispatchToProps)(UnconnectedGetMovies)
