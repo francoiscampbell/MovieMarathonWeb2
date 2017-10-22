@@ -5,16 +5,19 @@ import {
     API_URL_DEV,
     API_URL_PROD,
 } from './constants'
+import {generateSchedules} from 'scheduling/ScheduleGenerator'
 
 
 const FETCH_MOVIES_ERROR = 'movie-marathon/movies/FETCH_MOVIES_ERROR'
 const FETCH_MOVIES_LOADING = 'movie-marathon/movies/FETCH_MOVIES_LOADING'
 const FETCH_MOVIES_SUCCESS = 'movie-marathon/movies/FETCH_MOVIES_SUCCESS'
+const SELECT_MOVIES = 'movie-marathon/movies/SELECT_MOVIES'
 
 const initialState = Immutable.fromJS({
     error: '',
     isLoading: false,
     movies: [],
+    selectedMovies: [],
 })
 
 export default function reducer(state = initialState, action) {
@@ -35,6 +38,13 @@ export default function reducer(state = initialState, action) {
                 isLoading: false,
                 movies: Immutable.fromJS(action.payload)
             })
+        case SELECT_MOVIES: {
+            return state.merge({
+                error: '',
+                isLoading: false,
+                selectedMovies: action.payload
+            })
+        }
         default:
             return state
     }
@@ -78,6 +88,17 @@ function fetchMoviesSuccess(movies) {
     }
 }
 
+export function selectMovies(selectedMovies) {
+    return {
+        type: SELECT_MOVIES,
+        payload: selectedMovies
+    }
+}
+
 export function sortedMovies(state) {
     return state.getIn(['movies', 'movies']).sortBy(movie => movie.get('title')).toList()
+}
+
+export function schedules(state) {
+    return generateSchedules(state.getIn(['movies', 'selectedMovies']))
 }

@@ -1,3 +1,4 @@
+import {connect} from 'react-redux'
 import PropTypes from 'prop-types'
 import React from 'react'
 import Immutable from 'immutable'
@@ -5,15 +6,18 @@ import humanizeDuration from 'humanize-duration'
 import Raisedbutton from 'material-ui/RaisedButton'
 import Timeline from 'react-visjs-timeline'
 
-import {makeCalendar, saveCalendar} from '../../../scheduling/ScheduleExporter'
+import {
+    makeCalendar,
+    saveCalendar
+} from 'scheduling/ScheduleExporter'
+import {schedules} from 'flux/ducks/movies'
 
 import styles from './scheduleslist.scss'
 
 
-export default class SchedulesList extends React.PureComponent {
-
+export class UnconnectedSchedulesList extends React.PureComponent {
     static propTypes = {
-        schedules: PropTypes.instanceOf(Immutable.List)
+        schedules: PropTypes.instanceOf(Immutable.List).isRequired
     }
 
     state = {
@@ -144,9 +148,16 @@ export default class SchedulesList extends React.PureComponent {
             .findIndex(e => e.checked)
         const schedule = this.state.schedulesToShow.get(selectedIndex)
 
-
         const calendar = makeCalendar(schedule)
         console.log(calendar)
         saveCalendar(calendar)
     }
 }
+
+function mapStateToProps(state) {
+    return {
+        schedules: schedules(state),
+    }
+}
+
+export default connect(mapStateToProps)(UnconnectedSchedulesList)

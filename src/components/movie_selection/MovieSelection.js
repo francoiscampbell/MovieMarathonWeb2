@@ -1,27 +1,29 @@
 import {connect} from 'react-redux'
 import Immutable from 'immutable'
 import PropTypes from 'prop-types'
+import {push} from 'react-router-redux'
 import React from 'react'
 
-import {generateSchedules} from 'scheduling/ScheduleGenerator'
 import SubmitCheckboxList from 'components/movie_selection/SubmitCheckboxList'
-import {sortedMovies} from 'flux/ducks/movies'
+import {
+    selectMovies,
+    sortedMovies
+} from 'flux/ducks/movies'
 
 
 export class UnconnectedMovieSelection extends React.PureComponent {
     static propTypes = {
-        movies: PropTypes.instanceOf(Immutable.List),
-        isLoading: PropTypes.bool.isRequired,
-        onLoading: PropTypes.func,
-        onSchedules: PropTypes.func
+        goToNextStep: PropTypes.func.isRequired,
+        movies: PropTypes.instanceOf(Immutable.List).isRequired,
+        selectMovies: PropTypes.func.isRequired
     }
 
-    onSubmit = (selectedIndices) => {
-        this.props.onLoading()
+    onSubmit = selectedIndices => {
         const selectedMovies = selectedIndices.map(index => {
             return this.props.movies.get(index)
         }).toList()
-        this.props.onSchedules(generateSchedules(selectedMovies))
+        this.props.selectMovies(selectedMovies)
+        this.props.goToNextStep()
     }
 
     render() {
@@ -45,4 +47,9 @@ function mapStateToProps(state) {
     }
 }
 
-export default connect(mapStateToProps)(UnconnectedMovieSelection)
+const mapDispatchToProps = {
+    selectMovies,
+    goToNextStep: () => push('/schedules')
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(UnconnectedMovieSelection)

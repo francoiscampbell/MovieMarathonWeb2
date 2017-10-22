@@ -10,7 +10,6 @@ import Loading from 'components/Loading'
 
 
 export class UnconnectedGetMovies extends React.PureComponent {
-
     static propTypes = {
         error: PropTypes.string.isRequired,
         fetchMovies: PropTypes.func.isRequired,
