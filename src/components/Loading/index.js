@@ -1,22 +1,28 @@
 import PropTypes from 'prop-types'
-import React from 'react'
 import CircularProgress from "material-ui/CircularProgress"
+import React from 'react'
+import styled from 'styled-components'
 
-import styles from './loading.scss'
+
+const LoadingText = styled.span`
+    line-height: 40px;
+    padding-left: 16px;
+    vertical-align: bottom;
+`
 
 export default class Loading extends React.Component {
 
     static propTypes = {
-        text: PropTypes.string.isRequired
+        children: PropTypes.string.isRequired
     }
 
     render() {
         return (
             <div>
                 <CircularProgress/>
-                <span className={styles.text}>
-                    {this.props.text}
-                </span>
+                <LoadingText>
+                    {this.props.children}
+                </LoadingText>
             </div>
         )
     }

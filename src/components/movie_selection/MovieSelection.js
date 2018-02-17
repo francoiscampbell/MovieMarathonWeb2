@@ -1,19 +1,20 @@
 import {connect} from 'react-redux'
+import {createStructuredSelector} from 'reselect'
 import Immutable from 'immutable'
 import PropTypes from 'prop-types'
-import {push} from 'react-router-redux'
 import React from 'react'
 
+import Loading from 'components/Loading'
 import SubmitCheckboxList from 'components/movie_selection/SubmitCheckboxList'
 import {
-    selectMovies,
-    sortedMovies
+    actions as moviesActions,
+    selectors as moviesSelectors
 } from 'flux/ducks/movies'
 
 
 export class UnconnectedMovieSelection extends React.PureComponent {
     static propTypes = {
-        goToNextStep: PropTypes.func.isRequired,
+        isLoading: PropTypes.bool.isRequired,
         movies: PropTypes.instanceOf(Immutable.List).isRequired,
         selectMovies: PropTypes.func.isRequired
     }
@@ -23,10 +24,16 @@ export class UnconnectedMovieSelection extends React.PureComponent {
             return this.props.movies.get(index)
         }).toList()
         this.props.selectMovies(selectedMovies)
-        this.props.goToNextStep()
     }
 
     render() {
+        if (this.props.isLoading) {
+            return (
+                <Loading>
+                    Loading movies
+                </Loading>
+            )
+        }
         if (this.props.movies.size === 0) {
             return <h1>No movies found near that location</h1>
         }
@@ -41,15 +48,13 @@ export class UnconnectedMovieSelection extends React.PureComponent {
     }
 }
 
-function mapStateToProps(state) {
-    return {
-        movies: sortedMovies(state)
-    }
-}
+const mapStateToProps = createStructuredSelector({
+    isLoading: moviesSelectors.isLoadingSelector,
+    movies: moviesSelectors.sortedMoviesSelector
+})
 
 const mapDispatchToProps = {
-    selectMovies,
-    goToNextStep: () => push('/schedules')
+    selectMovies: moviesActions.selectMovies,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(UnconnectedMovieSelection)

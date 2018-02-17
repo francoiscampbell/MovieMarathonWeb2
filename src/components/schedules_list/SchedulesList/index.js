@@ -1,19 +1,25 @@
 import {connect} from 'react-redux'
+import {createStructuredSelector} from 'reselect'
 import PropTypes from 'prop-types'
 import React from 'react'
 import Immutable from 'immutable'
 import humanizeDuration from 'humanize-duration'
-import Raisedbutton from 'material-ui/RaisedButton'
+import RaisedButton from 'material-ui/RaisedButton'
+import styled from 'styled-components'
 import Timeline from 'react-visjs-timeline'
 
 import {
     makeCalendar,
     saveCalendar
 } from 'scheduling/ScheduleExporter'
-import {schedules} from 'flux/ducks/movies'
+import {selectors as moviesSelectors} from 'flux/ducks/movies'
 
-import styles from './scheduleslist.scss'
 
+const Button = styled(RaisedButton)`
+  margin-top: 32px;
+`
+
+const tooltopLineClassName = 'tooltip_line'
 
 export class UnconnectedSchedulesList extends React.PureComponent {
     static propTypes = {
@@ -38,8 +44,7 @@ export class UnconnectedSchedulesList extends React.PureComponent {
         ) : null
         const hasMoreSchedules = this.props.schedules.size > this.state.schedulesToShow.size
         const showMoreButton = hasMoreSchedules ? (
-            <Raisedbutton
-                className={styles.buttonbottom}
+            <Button
                 fullWidth={true}
                 label="Show More"
                 onClick={this.onShowMore}
@@ -47,8 +52,7 @@ export class UnconnectedSchedulesList extends React.PureComponent {
         ) : null
 
         const exportButton = (
-            <Raisedbutton
-                className={styles.buttonbottom}
+            <Button
                 fullWidth={true}
                 label="Export Schedule"
                 primary={true}
@@ -99,18 +103,19 @@ export class UnconnectedSchedulesList extends React.PureComponent {
                 const endTime = startTime.clone().add(runTime)
                 const delay = schedule.getIn(['delays', movieIndex])
                 const delayHtml = delay ?
-                    `<div class="${styles.tooltip_line}">Delay until next movie: ${humanizeDuration(delay)}</div>` :
+                    `<div class="${tooltopLineClassName}">Delay until next movie: ${humanizeDuration(delay)}</div>` :
                     ''
 
                 const title = movie.get('title')
                 const theatre = schedule.getIn(['theatre', 'name'])
+
                 const tooltip = `
                     <div>
-                        <div class="${styles.tooltip_line}"><h3>${title}</h3></div>
-                        <div class="${styles.tooltip_line}"><h4>${theatre}</h4></div>
-                        <div class="${styles.tooltip_line}">Start time: ${startTime.format('dddd MMMM D YYYY, h:mm a')}</div> 
-                        <div class="${styles.tooltip_line}">Run time: ${humanizeDuration(runTime)}</div> 
-                        <div class="${styles.tooltip_line}">End time: ${endTime.format('dddd MMMM D YYYY, h:mm a')}</div> 
+                        <div class="${classNameclassName}"><h3>${title}</h3></div>
+                        <div class="${tooltopLineClassName}"><h4>${theatre}</h4></div>
+                        <div class="${tooltopLineClassName}">Start time: ${startTime.format('dddd MMMM D YYYY, h:mm a')}</div> 
+                        <div class="${tooltopLineClassName}">Run time: ${humanizeDuration(runTime)}</div> 
+                        <div class="${tooltopLineClassName}">End time: ${endTime.format('dddd MMMM D YYYY, h:mm a')}</div> 
                         ${delayHtml}
                     </div>
                 `
@@ -154,10 +159,8 @@ export class UnconnectedSchedulesList extends React.PureComponent {
     }
 }
 
-function mapStateToProps(state) {
-    return {
-        schedules: schedules(state),
-    }
-}
+const mapStateToProps = createStructuredSelector({
+    schedules: moviesSelectors.schedulesSelector
+})
 
 export default connect(mapStateToProps)(UnconnectedSchedulesList)

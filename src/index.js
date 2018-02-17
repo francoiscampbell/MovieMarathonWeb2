@@ -5,7 +5,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 
 import Index from 'components/Index'
-import store from 'flux/store'
+import createStore from 'flux/createStore'
 
 
 injectTapEventPlugin()
@@ -15,7 +15,7 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 ReactDOM.render(
-    <Provider store={store}>
+    <Provider store={createStore()}>
         <MuiThemeProvider>
             <Index/>
         </MuiThemeProvider>

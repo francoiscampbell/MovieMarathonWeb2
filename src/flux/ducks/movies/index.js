@@ -1,104 +1,14 @@
-import axios from 'axios'
-import Immutable from 'immutable'
-
-import {
-    API_URL_DEV,
-    API_URL_PROD,
-} from './constants'
-import {generateSchedules} from 'scheduling/ScheduleGenerator'
+import reducer from './reducer'
+import * as actions from './actions'
+import * as constants from './constants'
+import sagaWatcher from './sagas'
+import * as selectors from './selectors'
 
 
-const FETCH_MOVIES_ERROR = 'movie-marathon/movies/FETCH_MOVIES_ERROR'
-const FETCH_MOVIES_LOADING = 'movie-marathon/movies/FETCH_MOVIES_LOADING'
-const FETCH_MOVIES_SUCCESS = 'movie-marathon/movies/FETCH_MOVIES_SUCCESS'
-const SELECT_MOVIES = 'movie-marathon/movies/SELECT_MOVIES'
-
-const initialState = Immutable.fromJS({
-    error: '',
-    isLoading: false,
-    movies: [],
-    selectedMovies: [],
-})
-
-export default function reducer(state = initialState, action) {
-    switch (action.type) {
-        case FETCH_MOVIES_ERROR:
-            return state.merge({
-                error: 'Error fetching movies',
-                isLoading: false,
-            })
-        case FETCH_MOVIES_LOADING:
-            return state.merge({
-                error: '',
-                isLoading: true,
-            })
-        case FETCH_MOVIES_SUCCESS:
-            return state.merge({
-                error: '',
-                isLoading: false,
-                movies: Immutable.fromJS(action.payload)
-            })
-        case SELECT_MOVIES: {
-            return state.merge({
-                error: '',
-                isLoading: false,
-                selectedMovies: action.payload
-            })
-        }
-        default:
-            return state
-    }
-}
-
-export function fetchMovies(lat, lng, date) {
-    return dispatch => {
-        dispatch(fetchMoviesLoading())
-        const config = {
-            params: {
-                lat,
-                lng,
-                startDate: date.format('YYYY-MM-DD')
-            }
-        }
-        const url = process.env.NODE_ENV === 'production' ?
-            API_URL_PROD :
-            API_URL_DEV
-        return axios.get(url, config)
-            .then(resp => dispatch(fetchMoviesSuccess(resp.data)))
-            .catch(() => dispatch(fetchMoviesError()))
-    }
-}
-
-function fetchMoviesError() {
-    return {
-        type: FETCH_MOVIES_ERROR,
-    }
-}
-
-function fetchMoviesLoading() {
-    return {
-        type: FETCH_MOVIES_LOADING,
-    }
-}
-
-function fetchMoviesSuccess(movies) {
-    return {
-        type: FETCH_MOVIES_SUCCESS,
-        payload: movies,
-    }
-}
-
-export function selectMovies(selectedMovies) {
-    return {
-        type: SELECT_MOVIES,
-        payload: selectedMovies
-    }
-}
-
-export function sortedMovies(state) {
-    return state.getIn(['movies', 'movies']).sortBy(movie => movie.get('title')).toList()
-}
-
-export function schedules(state) {
-    return generateSchedules(state.getIn(['movies', 'selectedMovies']))
+export default reducer
+export {
+    actions,
+    constants,
+    sagaWatcher,
+    selectors
 }

@@ -1,12 +1,19 @@
 import Immutable from 'immutable'
 import PropTypes from 'prop-types'
 import React from 'react'
+import styled from 'styled-components'
 
 import Checkbox from 'material-ui/Checkbox'
 import RaisedButton from 'material-ui/RaisedButton'
 
-import styles from './submitcheckboxlist.scss'
 
+const SubmitButtonTop = styled(RaisedButton)`
+    margin-bottom: 32px;
+`
+
+const SubmitButtonBottom = styled(RaisedButton)`
+    margin-top: 32px;
+`
 
 export default class SubmitCheckboxList extends React.PureComponent {
 
@@ -41,16 +48,14 @@ export default class SubmitCheckboxList extends React.PureComponent {
 
         return (
             <form onSubmit={this.handleFormSubmit}>
-                <RaisedButton
-                    className={styles.submitbuttontop}
+                <SubmitButtonTop
                     fullWidth={true}
                     label="Submit"
                     primary={true}
                     type="submit"
                 />
                 {listItems}
-                <RaisedButton
-                    className={styles.submitbuttonbottom}
+                <SubmitButtonBottom
                     fullWidth={true}
                     label="Submit"
                     primary={true}

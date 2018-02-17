@@ -1,9 +1,9 @@
 const path = require('path')
-const webpack = require('webpack')
 
 const devContentBase = path.resolve('./docs-dev/')
 module.exports = {
     entry: [
+        'babel-polyfill',
         './src/index.js'
     ],
     output: {
@@ -21,7 +21,7 @@ module.exports = {
     devtool: 'cheap-module-eval-source-map',
 
     resolve: {
-        extensions: ['.js', '.scss', '.json'],
+        extensions: ['.js', '.json'],
         modules: [
             path.resolve('./src'),
             'node_modules'
@@ -33,9 +33,6 @@ module.exports = {
             test: /\.js$/,
             exclude: /node_modules/,
             loader: 'babel-loader'
-        }, {
-            test: /\.scss$/,
-            loader: 'style-loader!css-loader?sourceMap&modules&camelCase!sass-loader?sourceMap'
         }, {
             test: /\.css$/,
             loader: "style-loader!css-loader?importLoaders=1"
