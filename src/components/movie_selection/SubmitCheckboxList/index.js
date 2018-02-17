@@ -30,10 +30,6 @@ export default class SubmitCheckboxList extends React.PureComponent {
         sort: false
     }
 
-    componentDidMount() {
-        console.dir(styles)
-    }
-
     render() {
         this.selected = this.props.items.map(_ => false).toMap()
         const listItems = this.props.items.map((item, index) => {

@@ -20,7 +20,7 @@ import {
 } from './actions'
 
 
-function* fetchMoviesSaga({lat, lng, date}) {
+function* fetchMoviesSaga({payload: {lat, lng, date}}) {
     yield put(fetchMoviesLoading())
     const url = process.env.NODE_ENV === 'production' ?
         API_URL_PROD :
@@ -40,6 +40,7 @@ function* fetchMoviesSaga({lat, lng, date}) {
         yield put(fetchMoviesSuccess(resp.data))
         yield put(push('/movies'))
     } catch (e) {
+        debugger
         yield put(fetchMoviesError())
     }
 }
