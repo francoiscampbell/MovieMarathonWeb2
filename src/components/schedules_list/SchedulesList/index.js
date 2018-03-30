@@ -19,7 +19,7 @@ const Button = styled(RaisedButton)`
   margin-top: 32px;
 `
 
-const tooltopLineClassName = 'tooltip_line'
+const tooltipLineClassName = 'tooltip_line'
 
 export class UnconnectedSchedulesList extends React.PureComponent {
     static propTypes = {
@@ -51,14 +51,14 @@ export class UnconnectedSchedulesList extends React.PureComponent {
             />
         ) : null
 
-        const exportButton = (
+        const exportButton =  hasSchedules ? (
             <Button
                 fullWidth={true}
                 label="Export Schedule"
                 primary={true}
                 type="submit"
             />
-        )
+        ) : null
 
         return (
             <div>
@@ -103,7 +103,7 @@ export class UnconnectedSchedulesList extends React.PureComponent {
                 const endTime = startTime.clone().add(runTime)
                 const delay = schedule.getIn(['delays', movieIndex])
                 const delayHtml = delay ?
-                    `<div class="${tooltopLineClassName}">Delay until next movie: ${humanizeDuration(delay)}</div>` :
+                    `<div class="${tooltipLineClassName}">Delay until next movie: ${humanizeDuration(delay)}</div>` :
                     ''
 
                 const title = movie.get('title')
@@ -111,11 +111,11 @@ export class UnconnectedSchedulesList extends React.PureComponent {
 
                 const tooltip = `
                     <div>
-                        <div class="${classNameclassName}"><h3>${title}</h3></div>
-                        <div class="${tooltopLineClassName}"><h4>${theatre}</h4></div>
-                        <div class="${tooltopLineClassName}">Start time: ${startTime.format('dddd MMMM D YYYY, h:mm a')}</div> 
-                        <div class="${tooltopLineClassName}">Run time: ${humanizeDuration(runTime)}</div> 
-                        <div class="${tooltopLineClassName}">End time: ${endTime.format('dddd MMMM D YYYY, h:mm a')}</div> 
+                        <div class="${tooltipLineClassName}"><h3>${title}</h3></div>
+                        <div class="${tooltipLineClassName}"><h4>${theatre}</h4></div>
+                        <div class="${tooltipLineClassName}">Start time: ${startTime.format('dddd MMMM D YYYY, h:mm a')}</div> 
+                        <div class="${tooltipLineClassName}">Run time: ${humanizeDuration(runTime)}</div> 
+                        <div class="${tooltipLineClassName}">End time: ${endTime.format('dddd MMMM D YYYY, h:mm a')}</div> 
                         ${delayHtml}
                     </div>
                 `

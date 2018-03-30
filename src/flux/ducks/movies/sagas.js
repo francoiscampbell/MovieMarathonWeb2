@@ -46,7 +46,7 @@ function* fetchMoviesSaga({payload: {lat, lng, date}}) {
 }
 
 function* selectMoviesSaga() {
-    yield put(push('/schedulesSelector'))
+    yield put(push('/schedules'))
 }
 
 export default function* moviesSagaWatcher() {

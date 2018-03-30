@@ -1,3 +1,4 @@
+import createHistory from 'history/createMemoryHistory'
 import injectTapEventPlugin from 'react-tap-event-plugin'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import {Provider} from 'react-redux'
@@ -14,10 +15,12 @@ if (process.env.NODE_ENV !== 'production') {
     console.log('dev')
 }
 
+const history = createHistory()
+
 ReactDOM.render(
-    <Provider store={createStore()}>
+    <Provider store={createStore(history)}>
         <MuiThemeProvider>
-            <Index/>
+            <Index history={history}/>
         </MuiThemeProvider>
     </Provider>,
     document.getElementById('react-app')
