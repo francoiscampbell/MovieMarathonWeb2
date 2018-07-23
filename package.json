@@ -50,14 +50,14 @@
     "vis": "^4.20.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.0.0-beta.40",
-    "@babel/preset-env": "^7.0.0-beta.40",
+    "@babel/core": "7.0.0-beta.40",
+    "@babel/preset-env": "7.0.0-beta.40",
     "babel-loader": "8.0.0-beta.0",
-    "babel-plugin-transform-class-properties": "^6.24.1",
-    "babel-plugin-transform-react-jsx": "^6.24.1",
-    "babel-polyfill": "^6.26.0",
-    "source-map-loader": "^0.2.1",
-    "webpack": "^2.6.1",
-    "webpack-dev-server": "^2.7.1"
+    "babel-plugin-transform-class-properties": "6.24.1",
+    "babel-plugin-transform-react-jsx": "6.24.1",
+    "babel-polyfill": "6.26.0",
+    "source-map-loader": "0.2.1",
+    "webpack": "2.7.0",
+    "webpack-dev-server": "2.7.1"
   }
 }
